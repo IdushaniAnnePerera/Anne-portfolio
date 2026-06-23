@@ -1,9 +1,8 @@
-# Arun One Page Portfolio
+# Anne Perera One Page Portfolio
 
-[![Live Demo: arunkushwaha.xyz](https://img.shields.io/badge/Live%20Demo-arunkushwaha.xyz-ff00ff?style=for-the-badge&logo=google-chrome&logoColor=white)](https://arunkushwaha.xyz)
 [![CI](https://github.com/Arun-kushwaha007/Arun-One_page_Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Arun-kushwaha007/Arun-One_page_Portfolio/actions/workflows/ci.yml)
 
-Cyberpunk-styled portfolio built with React and Vite. The site presents Arun Kushwaha's profile, experience, projects, skills, contact details, and a set of interactive UI systems including a browser terminal, chatbot assistant, animated overlays, and a Matrix-style easter egg.
+Cyberpunk-styled portfolio built with React and Vite. The site presents Anne Perera's profile, experience, projects, skills, contact details, and a set of interactive UI systems including a browser terminal, chatbot assistant, animated overlays, and a Matrix-style easter egg.
 
 ![Portfolio Demo](Frontend/public/portfolio.gif)
 
@@ -25,6 +24,19 @@ This repository is centered on the `Frontend/` app:
 - `PortfolioChatbot` with typed responses, intent-based replies, optional voice playback, and animated avatars
 - Smooth scrolling and layered visual effects powered by Framer Motion, Tailwind CSS v4, and React 19
 - Data-driven content so most profile updates can be made from a single source file
+
+## Deployment
+
+This project is set up so you can deploy it yourself on Vercel.
+
+Suggested Vercel settings:
+
+- Framework preset: Vite
+- Root directory: `Frontend`
+- Build command: `npm run build`
+- Output directory: `dist`
+
+If you prefer, you can also connect the repository to Vercel and let it auto-deploy on every push.
 
 ## Tech Stack
 
@@ -127,7 +139,7 @@ Interactive assistant responses are derived from the chatbot data layer under:
 
 ## Contribution Notes
 
-Arun Kushwaha is the primary author and maintainer of this project. If you want to report an issue or contribute a fix, follow the process documented in [CONTRIBUTING.md](./CONTRIBUTING.md).
+Anne Perera is the primary author and maintainer of this project. If you want to report an issue or contribute a fix, follow the process documented in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
