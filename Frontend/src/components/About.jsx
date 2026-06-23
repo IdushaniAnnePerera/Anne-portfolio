@@ -60,7 +60,7 @@ const SpotlightCard = ({ children, className = "", delay = 0, neoColor = "blue" 
   const glows = {
     blue: "border-neon-blue/40 group-hover:border-neon-blue/80 shadow-neon-blue/5",
     purple: "border-neon-purple/40 group-hover:border-neon-purple/80 shadow-neon-purple/5",
-    green: "border-neon-green/40 group-hover:border-neon-green/80 shadow-neon-green/5"
+    gray: "border-neon-green/40 group-hover:border-neon-green/80 shadow-neon-green/5"
   };
 
   return (
@@ -173,7 +173,7 @@ const About = () => {
               <div className="flex gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-orange-500/30" />
                 <div className="w-1.5 h-1.5 rounded-full bg-gray-500/30" />
-                <div className="w-1.5 h-1.5 rounded-full bg-neon-green/30" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-400/30" />
               </div>
               <span className="text-[8px] font-mono text-white/20 tracking-widest uppercase font-bold">PROTOCOL_ACTIVE::READY</span>
             </div>
@@ -275,16 +275,16 @@ const About = () => {
             </div>
           </SpotlightCard>
 
-          <SpotlightCard className="md:col-span-4 lg:col-span-3 p-6 flex flex-col justify-between" delay={0.4} neoColor="green">
+          <SpotlightCard className="md:col-span-4 lg:col-span-3 p-6 flex flex-col justify-between" delay={0.4} neoColor="gray">
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="p-2 rounded-lg bg-neon-green/10 border border-neon-green/20 relative">
-                  <GraduationCap className="w-6 h-6 text-neon-green drop-shadow-[0_0_5px_rgba(57,255,20,0.4)]" />
-                  <ShieldCheck className="w-3 h-3 text-neon-green absolute -top-1 -right-1 bg-[#030712] rounded-full" />
+                <div className="p-2 rounded-lg bg-gray-500/10 border border-gray-400/20 relative">
+                  <GraduationCap className="w-6 h-6 text-gray-300 drop-shadow-[0_0_5px_rgba(163,163,163,0.4)]" />
+                  <ShieldCheck className="w-3 h-3 text-gray-300 absolute -top-1 -right-1 bg-[#030712] rounded-full" />
                 </div>
                 <div className="text-left overflow-hidden">
                   <h4 className="text-base font-black text-white leading-tight uppercase tracking-tight truncate">{education.degree.split(' in ')[0]}</h4>
-                  <p className="text-[9px] text-neon-green/60 font-bold font-mono tracking-widest uppercase leading-none mt-1">Verified_Node</p>
+                  <p className="text-[9px] text-gray-300/60 font-bold font-mono tracking-widest uppercase leading-none mt-1">Verified_Node</p>
                 </div>
               </div>
             </div>
