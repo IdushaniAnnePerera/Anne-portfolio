@@ -16,47 +16,47 @@ function scoreKeywords(normalizedInput, keywords = []) {
 
 export function buildKnowledgeBase() {
 
-  const projectFollowUps = ['project-pdf-csv-pipeline', 'project-collabnest', 'project-ai-fir', 'project-resume-roaster', 'project-self-driving-car'];
+  const projectFollowUps = ['project-slr-gat', 'project-super-resolution', 'project-credit-ai', 'project-citation-verifier', 'project-local-rag'];
 
   const projectEntries = [
     {
-      id: 'project-pdf-csv-pipeline',
-      label: 'PDF-CSV Pipeline',
-      keywords: ['pdf', 'csv', 'pipeline', 'enterprise', 'gcp', 'document ai'],
-      reply: "The Enterprise PDF to CSV Pipeline is a production-grade system using GCP Document AI. It processes over 5,000 documents per batch and features dynamic worker scaling with rate-limiting.",
-      followUps: projectFollowUps.filter(id => id !== 'project-pdf-csv-pipeline').concat(['stack', 'contact']),
+      id: 'project-slr-gat',
+      label: 'SLR GAT (GNN)',
+      keywords: ['slr', 'gat', 'gnn', 'railway', 'train', 'delay', 'monsoon', 'graph', 'research'],
+      reply: "SLR GAT is Anne's ongoing research project — a GATv2 framework with climate-conditioned edge weights to model and explain how monsoon weather reshapes train-delay propagation across Sri Lanka's railway network.",
+      followUps: projectFollowUps.filter(id => id !== 'project-slr-gat').concat(['stack', 'contact']),
       reaction: 'project-mode',
     },
     {
-      id: 'project-collabnest',
-      label: 'Collab-Nest',
-      keywords: ['collab-nest', 'collaboration', 'real-time', 'socket', 'redis'],
-      reply: "Collab-Nest is a real-time collaboration platform. It was build with Node.js, Socket-IO, and Redis. It's designed for high performance, handling over 100 requests per second with near-zero connection failures.",
-      followUps: projectFollowUps.filter(id => id !== 'project-collabnest').concat(['stack', 'contact']),
+      id: 'project-super-resolution',
+      label: 'Super-Resolution',
+      keywords: ['super resolution', 'esrgan', 'tensorrt', 'onnx', 'inference', 'image', 'upscale'],
+      reply: "The Super-Resolution project is an image upscaling pipeline using Real-ESRGAN with a PyTorch → ONNX → TensorRT (FP16) optimization chain that cuts inference latency 2× while preserving output quality.",
+      followUps: projectFollowUps.filter(id => id !== 'project-super-resolution').concat(['stack', 'contact']),
       reaction: 'project-mode',
     },
     {
-      id: 'project-ai-fir',
-      label: 'AI-FIR Analysis',
-      keywords: ['fir', 'legal', 'police', 'ai fir', 'hackathon'],
-      reply: "The AI FIR analysis project uses a RAG pipeline for legal-act prediction. It ranked in the top 10 out of over 400 teams at the Rajasthan Police Hackathon for its accuracy and system design.",
-      followUps: projectFollowUps.filter(id => id !== 'project-ai-fir').concat(['stack', 'contact']),
+      id: 'project-credit-ai',
+      label: 'CreditAI',
+      keywords: ['credit', 'creditai', 'risk', 'xgboost', 'fraud', 'lending', 'fintech', 'ml'],
+      reply: "CreditAI is an enterprise risk intelligence platform using ensemble ML models (XGBoost, Random Forest, Gradient Boosting) with fraud detection and NLP sentiment analysis for real-time lending decisions.",
+      followUps: projectFollowUps.filter(id => id !== 'project-credit-ai').concat(['stack', 'contact']),
       reaction: 'project-mode',
     },
     {
-      id: 'project-resume-roaster',
-      label: 'Resume Roaster',
-      keywords: ['resume', 'roaster', 'ats', 'optimizer', 'llm'],
-      reply: "Resume Roaster is an AI-powered ATS optimizer. It uses LLMs for semantic parsing and keyword optimization, currently processing over 100 requests daily with very low response times.",
-      followUps: projectFollowUps.filter(id => id !== 'project-resume-roaster').concat(['stack', 'contact']),
+      id: 'project-citation-verifier',
+      label: 'Citation Verifier',
+      keywords: ['citation', 'claim', 'verifier', 'chrome', 'extension', 'fact check', 'claude api'],
+      reply: "The Citation & Claim Verifier is a Chrome extension that fact-checks highlighted claims via the Claude API with live web search, returning source-backed verdicts (Supported / Disputed / Unverifiable).",
+      followUps: projectFollowUps.filter(id => id !== 'project-citation-verifier').concat(['stack', 'contact']),
       reaction: 'project-mode',
     },
     {
-      id: 'project-self-driving-car',
-      label: 'Self-Driving Car',
-      keywords: ['self-driving', 'car', 'simulation', 'neural network', 'genetic algorithm'],
-      reply: "This is a JavaScript-based self-driving car simulation. It uses Neural Networks and Genetic Algorithms for autonomous navigation, complete with ray-casting sensors and collision detection.",
-      followUps: projectFollowUps.filter(id => id !== 'project-self-driving-car').concat(['stack', 'contact']),
+      id: 'project-local-rag',
+      label: 'Local RAG',
+      keywords: ['rag', 'local', 'retrieval', 'augmented', 'generation', 'chatbot', 'faiss', 'ollama'],
+      reply: "Local RAG is a fully local Retrieval-Augmented Generation chatbot that answers questions exclusively from user-uploaded PDF, TXT, and Markdown documents using FAISS semantic search and Sentence Transformers.",
+      followUps: projectFollowUps.filter(id => id !== 'project-local-rag').concat(['stack', 'contact']),
       reaction: 'project-mode',
     }
   ];
@@ -64,9 +64,9 @@ export function buildKnowledgeBase() {
   const entries = [
     {
       id: 'intro',
-      label: 'Tell me about Arun',
-      keywords: ['who is arun', 'about arun', 'about', 'background', 'summary', profile.name],
-      reply: "Arun Kushwaha is a Full-Stack Developer specializing in scalable backend systems and cloud infrastructure. He is a final-year student at NIT Hamirpur with a focus on low-latency architectures and production-grade services.",
+      label: 'Tell me about Anne',
+      keywords: ['who is anne', 'about anne', 'about', 'background', 'summary', profile.name],
+      reply: "Anne Perera is a Computer Science undergraduate at the University of Kelaniya, Sri Lanka. She focuses on AI/ML research, full-stack development, and building production-grade systems spanning web, mobile, and data pipelines.",
       followUps: ['projects', 'stack', 'experience', 'contact'],
       reaction: 'wave',
     },
@@ -74,31 +74,31 @@ export function buildKnowledgeBase() {
       id: 'projects',
       label: 'Projects',
       keywords: ['projects', 'project', 'portfolio', 'build', 'work', 'demo'],
-      reply: "Arun has several high-impact projects. The main highlights include an Enterprise PDF to CSV Pipeline, the Collab-Nest real-time platform, AI FIR analysis, and a Self-Driving Car simulation. Which one would you like to hear more about?",
-      followUps: ['project-pdf-csv-pipeline', 'project-collabnest', 'project-ai-fir', 'project-resume-roaster', 'project-self-driving-car'],
+      reply: "Anne has several high-impact projects. Highlights include SLR GAT (ongoing GNN research), a Super-Resolution inference optimization pipeline, CreditAI, a Citation Verifier Chrome Extension, and a Local RAG chatbot. Which one would you like to hear more about?",
+      followUps: ['project-slr-gat', 'project-super-resolution', 'project-credit-ai', 'project-citation-verifier', 'project-local-rag'],
       reaction: 'project-mode',
     },
     {
       id: 'stack',
       label: 'Tech Stack',
       keywords: ['stack', 'skills', 'tech', 'tools', 'frameworks', 'languages', 'backend', 'frontend', 'cloud'],
-      reply: "Arun's tech stack is quite extensive. He works with JavaScript, Python, and Go for languages. For backend, he uses Node.js, Express, and FastAPI with databases like PostgreSQL and Redis. He's also proficient in Cloud and DevOps tools like GCP, AWS, Docker, and Kubernetes.",
+      reply: "Anne's tech stack spans Java, Python, TypeScript, and JavaScript for languages. For backend she uses Spring Boot, FastAPI, and Node.js. She works with PyTorch and GNNs for AI/ML, and deploys with AWS, Docker, and Vercel.",
       followUps: ['projects', 'experience', 'contact'],
       reaction: 'cpu',
     },
     {
       id: 'experience',
       label: 'Experience',
-      keywords: ['experience', 'internship', 'intern', 'work', 'career', 'roles', 'spec'],
-      reply: "Arun has professional experience as a Software Developer Intern at Credit-Mitra and as a Freelance Full-Stack Engineer. He also has significant leadership experience as the President of the SPEC Society at NIT Hamirpur.",
+      keywords: ['experience', 'internship', 'intern', 'work', 'career', 'roles', 'aws', 'rotaract'],
+      reply: "Anne is active in the tech community — she served as Head of Events and Logistics at AWS Student Community Day Sri Lanka 2026, is a member of the AWS Student Builder Group, and is an active Rotaract Club member at the University of Kelaniya.",
       followUps: ['projects', 'education', 'contact'],
       reaction: 'document',
     },
     {
       id: 'education',
       label: 'Education',
-      keywords: ['education', 'college', 'degree', 'nit', 'cgpa', 'study'],
-      reply: "Arun is pursuing a B-Tech in Electronics and Communication from NIT Hamirpur. He maintains a strong CGPA of 8.05 and has completed advanced coursework in System Design, Algorithms, and Operating Systems.",
+      keywords: ['education', 'college', 'degree', 'university', 'kelaniya', 'cgpa', 'study', 'colombo'],
+      reply: "Anne is pursuing a BSc (Hons) in Computer Science at the University of Kelaniya, Sri Lanka (2023 – Present). She also completed a Certificate Course on Data Science with Python at the University of Colombo School of Computing.",
       followUps: ['projects', 'experience', 'contact'],
       reaction: 'document',
     },
@@ -106,7 +106,7 @@ export function buildKnowledgeBase() {
       id: 'contact',
       label: 'Contact',
       keywords: ['contact', 'email', 'phone', 'reach', 'linkedin', 'github', 'connect'],
-      reply: "You can reach Arun via email at arunsk1310@gmail.com. You can also connect with him on LinkedIn or check out his latest code contributions on GitHub.",
+      reply: "You can reach Anne via email at anneperera008@gmail.com. Connect with her on LinkedIn at linkedin.com/in/anne-perera-b62171359, or check out her projects on GitHub at github.com/IdushaniAnnePerera.",
       followUps: ['projects', 'stack', 'experience'],
       reaction: 'mail',
     },
@@ -126,7 +126,7 @@ export function buildKnowledgeBase() {
     label: 'Fallback',
     keywords: [],
     reply:
-      "I only answer from Arun's portfolio content. Try asking about projects, tech stack, experience, education, or contact details.",
+      "I only answer from Anne's portfolio content. Try asking about projects, tech stack, experience, education, or contact details.",
     followUps: ['intro', 'projects', 'stack', 'contact'],
     reaction: 'alert',
   };
@@ -161,7 +161,7 @@ export function resolvePortfolioIntent(rawText = '', knowledgeBase = buildKnowle
   if (knowledgeBase.entriesById[normalizedInput.replace(/\s+/g, '-')]) {
     return knowledgeBase.entriesById[normalizedInput.replace(/\s+/g, '-')];
   }
-  
+
   // Also check for ID match without the 'project-' prefix if applicable
   if (knowledgeBase.entriesById[normalizedInput]) {
     return knowledgeBase.entriesById[normalizedInput];

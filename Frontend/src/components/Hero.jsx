@@ -339,19 +339,6 @@ const Hero = () => {
               onMouseEnter={() => setCursorType('text')}
               onMouseLeave={() => setCursorType('default')}
             >
-              {/* Available Status */}
-              <div className="flex items-center gap-3 mb-6 md:mb-10">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-300 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-gray-300"></span>
-                  </span>
-                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-gray-400">
-                    Status: Building the Future
-                  </span>
-                </div>
-              </div>
-
               <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black text-white leading-[1.05] tracking-tighter mb-4 md:mb-8 cursor-default">
                 Design. Code. <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-white to-neon-purple">

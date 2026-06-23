@@ -1,14 +1,14 @@
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Github, 
-  Linkedin, 
-  Code, 
-  Terminal, 
-  Database, 
-  Cloud, 
-  Cpu, 
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
+  Code,
+  Terminal,
+  Database,
+  Cloud,
+  Cpu,
   Globe,
   Server,
   Layout,
@@ -19,13 +19,13 @@ import {
 
 export const profile = {
   name: "Anne Perera",
-  role: "Full-Stack Developer specializing in Scalable Backend Systems",
-  summary: "Final-year B.Tech student at NIT Hamirpur with a focus on low-latency architectures and production-grade services. Dedicated to building efficient cloud infrastructure and high-performance real-time applications.",
+  role: "Computer Science Undergraduate | AI & Full-Stack Developer",
+  summary: "BSc (Hons) Computer Science student at University of Kelaniya, Sri Lanka. Passionate about AI/ML research, full-stack development, and building production-grade systems across web, mobile, and data pipelines.",
   hero: {
-    eyebrow: "Full-Stack Engineer • DevOps • AI Systems",
+    eyebrow: "AI/ML • Full-Stack • Research",
     headline: "Anne Perera",
     summary:
-      "I build fast, production-ready software for real-time systems, cloud platforms, and applied AI.",
+      "I build intelligent systems — from GNN-based research to production full-stack apps and ML pipelines.",
     primaryCta: {
       label: "View Projects",
       href: "#projects",
@@ -35,206 +35,193 @@ export const profile = {
       href: "#contact",
     },
   },
-  location: "Hamirpur, Himachal Pradesh, India",
-  email: "arunsk1310@gmail.com",
-  phone: "+91-9555547363",
+  location: "Gampaha, Sri Lanka",
+  email: "anneperera008@gmail.com",
+  phone: "+94 776999545",
   social: {
-    github: "https://github.com/Arun-kushwaha007",
-    linkedin: "https://www.linkedin.com/in/arun-kushwaha-394b5a340/",
-    leetcode: "https://leetcode.com/u/ArunKush007/",
-    codeforces: "https://codeforces.com/profile/Arun_Kushwaha"
+    github: "https://github.com/IdushaniAnnePerera",
+    linkedin: "https://www.linkedin.com/in/anne-perera-b62171359",
   },
-  image: "/assets/arunsk.jpg"
+  image: "/assets/anne.jpg"
 };
 
 export const skills = {
   "Languages": {
     icon: Code,
-    items: ["JavaScript", "TypeScript", "Python", "C++", "SQL", "Golang", "Java", "Bash"]
-  },
-  "Backend": {
-    icon: Server,
-    items: ["Node.js", "Express", "FastAPI", "REST", "GraphQL", "WebSockets", "Socket.IO"]
-  },
-  "Data & Infra": {
-    icon: Database,
-    items: ["MongoDB", "PostgreSQL", "Redis", "Cloud SQL", "GCS"]
-  },
-  "Cloud & DevOps": {
-    icon: Cloud,
-    items: ["GCP (Cloud Run, Document AI)", "AWS", "Docker", "Kubernetes", "CI/CD"]
+    items: ["Java", "Python", "C/C++/C#", "SQL", "PL/SQL", "TypeScript", "JavaScript", "HTML/CSS/PHP", "Prolog"]
   },
   "Frontend": {
     icon: Layout,
-    items: ["React", "Vite","Next.js", "Tailwind", "WebSocket clients"]
+    items: ["React.js", "Next.js", "React Native", "Flutter", "Tailwind CSS", "Bootstrap"]
   },
-  "Core": {
-    icon: Layers,
-    items: ["System Design", "Performance Testing", "Observability", "RBAC", "Microservices"]
+  "Backend": {
+    icon: Server,
+    items: ["Spring Boot", "Node.js", "Express.js", "FastAPI", "Flask", "REST APIs"]
+  },
+  "Databases": {
+    icon: Database,
+    items: ["MySQL", "MongoDB", "SQL Server", "Oracle", "SQLite", "FAISS"]
+  },
+  "AI & Data Science": {
+    icon: Cpu,
+    items: ["PyTorch", "LangChain", "NLP", "Sentiment Analysis", "Machine Learning", "GNNs", "TensorRT", "ONNX"]
+  },
+  "Cloud & DevOps": {
+    icon: Cloud,
+    items: ["AWS", "Docker", "Vercel", "Firebase", "CI/CD"]
   }
 };
 
 export const experiences = [
   {
-    id: "creditmitra-intern",
-    role: "Software Developer Intern",
-    company: "CreditMitra ",
-    period: "Nov 2025 – Present",
+    id: "aws-events",
+    role: "Head of Events and Logistics",
+    company: "AWS Student Community Day — Sri Lanka",
+    period: "2026",
     description: [
-        "Built core frontend modules for a fintech web platform using Next.js, converting business wireframes into responsive user interfaces.",
-        "Integrated third-party APIs for credit score checks and customer inquiry forms, handling asynchronous data flows and UI state management.",
-        "Collaborated with team members to structure reusable UI components and application routing.",
-        "Worked closely with senior developers to integrate frontend features with backend REST APIs."
-      ]
-  },
-   {
-      id: "freelance-pdf",
-      role: "Full-Stack Software Engineer (Freelance)",
-      company: "PDF Data Extraction Platform",
-      period: "oct 2025 – nov 2025",
-      description: [
-        "Built a production document pipeline: batch PDF → Document AI OCR → validation → CSV/Cloud SQL.",
-        "Designed concurrency & throttling: dynamic worker scaling (2→75 workers) with a hard cap of 15 concurrent Document AI calls.",
-        "Implemented deterministic data-validation and per-batch success-rate logging.",
-        "Cut DB overhead by batching: transformed 5,000+ individual writes into 2 bulk transactional operations per large batch."
-      ]
-    },
-  {
-    id: "spec-president",
-    role: "President",
-    company: "SPEC Society (Technical), NIT Hamirpur",
-    period: "Aug 2024 – Jul 2025",
-    description: [
-      "Led 80+ members, managed a $3,000 budget and 5+ industry partnerships.",
-      "Organized campus events with 2,000+ participants and standardized release/incident processes used by 8 dev teams."
+      "Led event planning and logistics for the AWS Student Community Day Sri Lanka 2026.",
+      "Coordinated venue, speakers, and attendee management for a large-scale tech community event."
     ]
   },
- 
   {
-    id: "electrothon",
-    role: "Web Development Coordinator",
-    company: "Electrothon 6.0, SPEC Society",
-    period: "Oct 2023 – Jul 2024",
+    id: "installation-ceremony",
+    role: "Editor & Organizing Committee Member",
+    company: "14th Installation Ceremony (23/24), University of Kelaniya",
+    period: "2023 – 2024",
     description: [
-      "Led an 8-person team to deliver a participant management platform for 400+ users (99.8% uptime).",
-      "Introduced Git workflows and CI/CD, cutting deployment time by 45%."
+      "Served as Editor on the Organizing Committee for the 14th Installation Ceremony of the University of Kelaniya.",
+      "Managed editorial content and event communications."
+    ]
+  },
+  {
+    id: "open-day",
+    role: "Organizing Committee Member",
+    company: "Open Day 2025 — Faculty of Science, University of Kelaniya",
+    period: "2025",
+    description: [
+      "Organized and coordinated the Faculty of Science Open Day, showcasing research and student projects.",
+      "Managed logistics and visitor experience for faculty-wide open event."
+    ]
+  },
+  {
+    id: "rotaract",
+    role: "Member",
+    company: "Rotaract Club of University of Kelaniya",
+    period: "2023 – Present",
+    description: [
+      "Active member of the Rotaract Club, participating in community service and leadership development initiatives."
     ]
   }
 ];
 
 export const projects = [
   {
-    id: "pdf-csv-pipeline",
-    title: "Enterprise PDF to CSV Pipeline",
-    tech: ["React", "Node.js", "GCP Document AI", "Cloud SQL", "Docker", "Pandas"],
-    description: "High-throughput document processing pipeline converting batch PDFs to structured CSV/SQL data.",
+    id: "slr-gat",
+    title: "SLR GAT (GNN) — Railway Delay Propagation",
+    tech: ["Python", "PyTorch", "PyTorch Geometric", "GATv2", "GNNExplainer", "Open-Meteo"],
+    description: "Ongoing research using Graph Attention Networks to model how monsoon weather reshapes train-delay propagation across Sri Lanka's railway network.",
     points: [
-      "Built a production pipeline processing 5,000+ documents per batch using GCP Document AI.",
-      "Designed dynamic worker scaling (2→75 workers) with rate-limiting for API quotas.",
-      "Optimized database performance by transforming individual writes into bulk transactional operations."
+      "Developing a GATv2 framework with climate-conditioned edge weights to model and explain monsoon-driven train-delay cascades.",
+      "Building a spatio-temporal event graph from timetable data and applying GNNExplainer to generate a season-aware cascade risk map.",
+      "Targeting operational decision-support for railway network management."
     ],
     links: {
-      github: "https://github.com/Arun-kushwaha007/pdf-to-csv/", 
-     
+      github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/pdf2csv.png"
+    image: "/assets/slr-gat.png"
   },
   {
-    id: "collabnest",
-    title: "CollabNest — Real-Time Collaboration Platform",
-    tech: ["Node.js", "Socket.IO", "Redis", "MongoDB", "Vite", "Firebase"],
-    description: "Architected a multi-tenant real-time task platform with RBAC, optimistic UI, and cron-based deadline alerts.",
+    id: "super-resolution",
+    title: "Super-Resolution & Inference Optimization",
+    tech: ["Python", "PyTorch", "ONNX", "TensorRT"],
+    description: "Image super-resolution pipeline using Real-ESRGAN with a PyTorch → ONNX → TensorRT (FP16) optimization chain, cutting inference latency 2×.",
     points: [
-      "Validated backend performance under sustained load: p50=52.3ms, p90=151.1ms, p95=241.6ms; sustained 101.38 req/s across 6,000 requests with 0% error rate.",
-      "Proven WebSocket stability in load tests (0% connection failures; session length p50=1118.4ms).",
-      "Reduced DB reads by 60% via Redis-backed Socket.IO session & task cache."
+      "Built an image super-resolution pipeline using Real-ESRGAN (RRDBNet) to upscale low-resolution images 4×, with tiled inference for memory-safe processing.",
+      "Optimized deployment via PyTorch → ONNX → TensorRT (FP16), reducing inference latency 2× while preserving output quality.",
+      "Built a three-way benchmark harness measuring p50/p90/p99 latency and PSNR/SSIM/LPIPS across backends with numerical parity verification."
     ],
     links: {
-      github: "https://github.com/Arun-kushwaha007/Deadline",
-      demo: "https://collab-nest-home.vercel.app/"
+      github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/collab.png"
+    image: "/assets/super-res.png"
   },
   {
-    id: "ai-fir",
-    title: "AI FIR Analysis & Legal-Act Prediction",
-    tech: ["Python", "Django", "RAG", "LLaMA2", "AWS"],
-    description: "Built a retrieval-augmented LLM pipeline for FIRs; deployed scalable inference for large documents (50MB+).",
+    id: "credit-ai",
+    title: "CreditAI — Enterprise Risk Intelligence Platform",
+    tech: ["Python", "FastAPI", "XGBoost", "Scikit-learn", "Docker"],
+    description: "AI-driven credit risk system using ensemble ML models with fraud detection and NLP-based sentiment analysis for real-time lending decisions.",
     points: [
-      "Ranked Top 10 / 400+ teams at Rajasthan Police Hackathon 2024 for system design and accuracy of legal-section predictions.",
-      "Evaluated model on a held-out dataset (reported accuracy in project notes)."
+      "Built ensemble models (XGBoost, Random Forest, Gradient Boosting) with fraud detection and NLP sentiment analysis for real-time lending decisions.",
+      "Built a modular FastAPI backend with Docker deployment, designed for scalable expansion with FinBERT and LSTM integration."
     ],
     links: {
-      github: "https://github.com/Arun-kushwaha007/RJPOLICE_HACK_991_The-Crusade_4"
+      github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/fir.png"
+    image: "/assets/credit-ai.png"
   },
   {
-    id: "resume-roaster",
-    title: "AI Resume Analyzer",
-    tech: ["FastAPI", "React.js", "Python", "Docker", "LLMs"],
-    description: "ATS optimization platform leveraging LLMs for semantic parsing and keyword optimization.",
+    id: "citation-verifier",
+    title: "Citation & Claim Verifier Chrome Extension",
+    tech: ["JavaScript", "Manifest V3", "Node.js", "Vercel", "Claude API"],
+    description: "Chrome extension that fact-checks highlighted claims via the Claude API with live web search, returning source-backed verdicts.",
     points: [
-      "Built high-performance FastAPI backend with 95%+ accuracy parser.",
-      "Processing 100+ daily analysis requests with average response time under 300ms."
+      "Built a Chrome extension that fact-checks highlighted claims, returning source-backed verdicts (Supported / Disputed / Unverifiable) via the Claude API with live web search.",
+      "Designed a serverless Vercel backend keeping the API key server-side, with token auth and rate limiting to prevent abuse."
     ],
     links: {
-      github: "https://github.com/Arun-kushwaha007/Resume-Roaster.git"
+      github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/rr.png"
+    image: "/assets/citation-verifier.png"
   },
   {
-    id: "self-driving-car",
-    title: "Self-Driving Car Simulation",
-    tech: ["JavaScript", "Neural Networks", "Genetic Algorithms"],
-    description: "Autonomous driving simulator with collision detection, ray-casting sensors, and genetic evolution.",
+    id: "agrilinker",
+    title: "Agrilinker Web Application",
+    tech: ["Java", "Spring Boot", "MongoDB", "WebSockets", "JWT"],
+    description: "Full-stack farmer–buyer platform with role-based authentication, real-time messaging, and integrated AI services.",
     points: [
-      "Built autonomous driving simulator with collision detection & obstacle modeling.",
-      "Implemented ray-casting sensor system enabling 360° perception.",
-      "Scaled rendering to 200+ vehicles at 30 FPS."
+      "Built a full-stack farmer–buyer platform with role-based authentication and order management.",
+      "Integrated real-time messaging and notifications using WebSockets and SSE.",
+      "Developed AI services including a chatbot, crop advisor, complaint handling, and sentiment analysis."
     ],
     links: {
-      github: "https://github.com/Arun-kushwaha007/Self-Driving-Car-Simulation",
-      demo: "https://self-driving-car-simulation-five.vercel.app/"
+      github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/nn.png"
+    image: "/assets/agrilinker.png"
   },
   {
-    id: "chat-app",
-    title: "Real-Time Chat Application",
-    tech: ["MERN Stack", "Socket.io", "Redux Toolkit"],
-    description: "Full-stack chat platform with real-time messaging, secure authentication, and chat rooms.",
+    id: "vital",
+    title: "Vital — Health & Fitness Companion App",
+    tech: ["Flutter", "Dart", "Firebase", "Cloud Firestore", "SQLite"],
+    description: "Cross-platform mobile app unifying five health domains with an offline-first SQLite store, Firebase backend, and Material 3 UI.",
     points: [
-      "Built full-stack real-time chat platform with WebSocket-based messaging.",
-      "Implemented JWT authentication and scalable database architecture.",
-      "Deployed with CI/CD pipelines achieving 99% uptime."
+      "Built a cross-platform mobile app unifying step, workout, meal, medication, and sleep tracking with an offline-first SQLite store and animated Material 3 UI.",
+      "Engineered a Firebase backend with Google Sign-In authentication and per-user Cloud Firestore sync, layering cross-device cloud backup over local storage."
     ],
     links: {
-      github: "https://github.com/Arun-kushwaha007/RealTime-Chat-app",
-      demo: "https://real-time-chat-app-client-taupe.vercel.app/"
+      github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/chat.png"
+    image: "/assets/vital.png"
   },
   {
-    id: "resqterra",
-    title: "ResQTerra - IoT Emergency Response",
-    tech: ["Python", "FastAPI", "React.js", "WebSockets", "IoT"],
-    description: "Drone-based rescue system utilizing LiDAR, GPR, and Jetson Nano for disaster response.",
+    id: "local-rag",
+    title: "Local RAG Chatbot",
+    tech: ["Python", "FastAPI", "React", "Tailwind CSS", "FAISS", "SQLite", "Ollama", "Sentence Transformers"],
+    description: "Fully local Retrieval-Augmented Generation chatbot that answers questions exclusively from user-uploaded documents using semantic search.",
     points: [
-      "Engineered asynchronous backend processing live telemetry from 5+ IoT sensors.",
-      "Selected as finalist by Department of Telecommunications, Government of India at 5G Innovation Hackathon."
+      "Built a fully local RAG chatbot answering questions from user-uploaded PDF, TXT, and Markdown documents using semantic search and grounded responses.",
+      "Implemented PyMuPDF document parsing, Sentence Transformers embeddings, FAISS vector retrieval, SQLite persistence, and a React + Tailwind interface with chat session history and source citations."
     ],
     links: {
-      github: "https://github.com/ResQTerra"
+      github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/resq.png"
+    image: "/assets/local-rag.png"
   },
 ];
 
 export const education = {
-  degree: "B.Tech in Electronics & Communication",
-  institution: "NIT Hamirpur",
-  period: "Aug 2022 – May 2026",
-  cgpa: "8.05/10.0",
-  coursework: "Algorithms, OS, DBMS, Networking, System Design"
+  degree: "BSc (Hons) in Computer Science",
+  institution: "University of Kelaniya, Sri Lanka",
+  period: "2023 – Present",
+  cgpa: null,
+  coursework: "Data Structures, Algorithms, Machine Learning, Database Systems, Software Engineering"
 };

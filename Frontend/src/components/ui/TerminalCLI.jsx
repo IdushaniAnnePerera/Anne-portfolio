@@ -75,7 +75,7 @@ const TerminalCLI = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([
-    { type: 'system', content: '>>> ARUN_OS v4.0.0 :: INITIALIZING CORE...' },
+    { type: 'system', content: '>>> ANNE_OS v4.0.0 :: INITIALIZING CORE...' },
     { type: 'system', content: '>>> HYBRID_CLI: STANDBY. TYPE "HELP" TO BEGIN.' },
   ]);
   const [commandHistory, setCommandHistory] = useState([]);
@@ -204,7 +204,7 @@ const TerminalCLI = () => {
       clear: { desc: 'Clear command buffer', run: () => { setHistory([]); return []; } },
       history: { desc: 'Show execution history', run: () => commandHistory.map((h, i) => ({ type: 'secondary', content: `${i + 1}. ${h}` })) },
       date: { desc: 'System timestamp', run: () => [{ type: 'system', content: `LOCAL_TIME: ${new Date().toLocaleString()}` }] },
-      pwd: { desc: 'Print working directory', run: () => [{ type: 'secondary', content: '/users/arun/portfolio' }] },
+      pwd: { desc: 'Print working directory', run: () => [{ type: 'secondary', content: '/users/anne/portfolio' }] },
       goto: { desc: 'Navigate to [section]', run: runGoto },
       cd: { desc: 'Alias for goto', run: runGoto },
       got: { desc: 'Alias for goto', run: runGoto },
@@ -359,7 +359,7 @@ const TerminalCLI = () => {
                 <div className="h-4 w-px bg-white/10 mx-1" />
                 <span className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-300/70">
                   <Globe className="h-3 w-3 animate-spin-slow" />
-                  USER@ARUN_OS:~
+                  USER@ANNE_OS:~
                 </span>
               </div>
               <div className="flex items-center gap-4">

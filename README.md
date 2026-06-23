@@ -1,6 +1,6 @@
 # Anne Perera One Page Portfolio
 
-[![CI](https://github.com/Arun-kushwaha007/Arun-One_page_Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Arun-kushwaha007/Arun-One_page_Portfolio/actions/workflows/ci.yml)
+[![CI](https://github.com/IdushaniAnnePerera/Arun-One_page_Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/IdushaniAnnePerera/Arun-One_page_Portfolio/actions/workflows/ci.yml)
 
 Cyberpunk-styled portfolio built with React and Vite. The site presents Anne Perera's profile, experience, projects, skills, contact details, and a set of interactive UI systems including a browser terminal, chatbot assistant, animated overlays, and a Matrix-style easter egg.
 

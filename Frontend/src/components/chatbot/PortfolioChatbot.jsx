@@ -39,7 +39,7 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
     () =>
       createMessage(
         'bot',
-        `Portfolio assistant online. ${BOT_CONFIG.personality} Ask me anything about Arun's website, or use the quick questions below.`,
+        `Portfolio assistant online. ${BOT_CONFIG.personality} Ask me anything about Anne's website, or use the quick questions below.`,
         { reaction: 'wave' }
       ),
     []
