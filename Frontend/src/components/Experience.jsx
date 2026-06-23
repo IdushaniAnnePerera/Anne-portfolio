@@ -27,7 +27,7 @@ const ExperienceCard = ({ exp, index }) => {
                   <div className="text-neon-purple font-mono text-lg">@{exp.company}</div>
                </div>
                <div className="text-right">
-                  <div className="px-3 py-1 border border-neon-green/30 bg-neon-green/10 rounded text-neon-green font-mono text-sm shadow-[0_0_10px_rgba(10,255,10,0.2)]">
+                  <div className="px-3 py-1 border border-gray-400/30 bg-gray-400/10 rounded text-gray-300 font-mono text-sm shadow-[0_0_10px_rgba(163,163,163,0.2)]">
                      {exp.period}
                   </div>
                </div>
@@ -77,7 +77,7 @@ const Experience = () => {
                </h2>
                <div className="absolute top-1/2 left-8 md:left-24 -translate-y-1/2">
                   <h3 className="text-3xl md:text-5xl font-bold text-white">
-                     <span className="text-neon-green mr-4">{">>>"}</span>
+                     <span className="text-orange-300 mr-4">{">>>"}</span>
                      Carrier Trajectory
                   </h3>
                </div>

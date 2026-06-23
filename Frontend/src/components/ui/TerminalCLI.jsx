@@ -64,7 +64,7 @@ const TypedEntry = ({ content, type, onComplete }) => {
       {type === 'command' && <span className="text-neon-blue font-bold">➜ ~</span>}
       {displayed}
       {index < content.length && (
-        <span className="inline-block w-1.5 h-4 bg-neon-green ml-0.5 animate-pulse" />
+        <span className="inline-block w-1.5 h-4 bg-orange-400 ml-0.5 animate-pulse" />
       )}
     </div>
   );
@@ -331,7 +331,7 @@ const TerminalCLI = () => {
             className="fixed bottom-20 left-4 md:bottom-6 md:left-6 z-[110] flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl border-2 border-gray-400/40 bg-black/80 text-gray-300 shadow-[0_0_20px_rgba(163,163,163,0.2)] transition-all hover:border-white hover:text-white group"
           >
             <Terminal className="h-5 w-5 md:h-6 md:w-6 transition-transform group-hover:scale-110" />
-            <div className="absolute inset-0 rounded-2xl bg-neon-green/5 animate-pulse" />
+            <div className="absolute inset-0 rounded-2xl bg-gray-400/5 animate-pulse" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -342,22 +342,22 @@ const TerminalCLI = () => {
             initial={{ y: 20, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
-            className={`fixed bottom-0 left-0 z-[110] flex flex-col overflow-hidden border-t-2 border-r-2 border-neon-green/50 bg-black/95 font-mono text-sm backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] crt-flicker ${isExpanded ? 'h-[90vh] w-full md:w-[850px]' : 'h-[60vh] md:h-[400px] w-full md:w-[700px]'
+            className={`fixed bottom-0 left-0 z-[110] flex flex-col overflow-hidden border-t-2 border-r-2 border-gray-400/50 bg-black/95 font-mono text-sm backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] crt-flicker ${isExpanded ? 'h-[90vh] w-full md:w-[850px]' : 'h-[60vh] md:h-[400px] w-full md:w-[700px]'
               } rounded-tr-2xl`}
           >
             {/* CRT Scanline Overlay */}
             <div className="absolute inset-0 z-0 pointer-events-none crt-scanlines opacity-30" />
 
             {/* Header */}
-            <div className="relative z-10 flex items-center justify-between border-b border-neon-green/20 bg-neon-green/5 px-5 py-3">
+            <div className="relative z-10 flex items-center justify-between border-b border-gray-400/20 bg-gray-400/5 px-5 py-3">
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-orange-500/50" />
                   <div className="w-3 h-3 rounded-full bg-gray-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-neon-green/50" />
+                  <div className="w-3 h-3 rounded-full bg-gray-400/50" />
                 </div>
                 <div className="h-4 w-px bg-white/10 mx-1" />
-                <span className="flex items-center gap-2 text-xs font-bold tracking-widest text-neon-green/70">
+                <span className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-300/70">
                   <Globe className="h-3 w-3 animate-spin-slow" />
                   USER@ARUN_OS:~
                 </span>
@@ -375,7 +375,7 @@ const TerminalCLI = () => {
             {/* Content Area */}
             <div
               ref={scrollRef}
-              className="relative z-10 flex-1 overflow-y-auto p-6 scrollbar-none selection:bg-neon-green selection:text-black"
+              className="relative z-10 flex-1 overflow-y-auto p-6 scrollbar-none selection:bg-orange-500 selection:text-black"
               onClick={() => inputRef.current?.focus()}
             >
               <AnimatePresence mode="popLayout">
@@ -402,7 +402,7 @@ const TerminalCLI = () => {
                   autoComplete="off"
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="flex-1 border-none bg-transparent py-1 text-white outline-none caret-neon-green placeholder:text-white/5"
+                  className="flex-1 border-none bg-transparent py-1 text-white outline-none caret-orange-400 placeholder:text-white/5"
                   placeholder='type "help" to list protocols...'
                   autoFocus
                 />
@@ -410,13 +410,13 @@ const TerminalCLI = () => {
             </div>
 
             {/* Status Footer */}
-            <div className="relative z-10 flex items-center justify-between border-t border-neon-green/10 bg-black px-5 py-2 text-[10px] text-neon-green/40 uppercase tracking-widest font-bold">
+            <div className="relative z-10 flex items-center justify-between border-t border-gray-400/10 bg-black px-5 py-2 text-[10px] text-gray-300/40 uppercase tracking-widest font-bold">
               <div className="flex gap-6">
                 <span className="flex items-center gap-1.5"><HistoryIcon className="w-3 h-3" /> HSTRY: {commandHistory.length}</span>
                 <span className="flex items-center gap-1.5"><Command className="w-3 h-3" /> ENV: PORTFOLIO_V4</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className={`w-1.5 h-1.5 rounded-full ${isMatrixMode ? 'bg-neon-green' : 'bg-neon-blue'}`} />
+                <div className={`w-1.5 h-1.5 rounded-full ${isMatrixMode ? 'bg-gray-300' : 'bg-neon-blue'}`} />
                 {isMatrixMode ? 'MATRIX_ENABLED' : 'TERMINAL_STABLE'}
               </div>
             </div>

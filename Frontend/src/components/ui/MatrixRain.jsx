@@ -32,22 +32,21 @@ const MatrixRain = () => {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = '#0F0'; // Standard green
+      ctx.fillStyle = '#D4D4D4'; // muted light gray
       ctx.font = fontSize + 'px monospace';
-      
+
       // Reduced glow effect
       ctx.shadowBlur = 2;
-      ctx.shadowColor = '#0F0';
+      ctx.shadowColor = '#F97316';
 
       for (let i = 0; i < rainDrops.length; i++) {
         const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-        
+
         // Fewer bright characters
         if (Math.random() > 0.99) {
-           ctx.fillStyle = '#BBF'; // Slightly muted white
+          ctx.fillStyle = '#FFFFFF'; // slightly brighter specks
         } else {
-           // Darker green for standard characters
-           ctx.fillStyle = '#0a440a'; 
+          ctx.fillStyle = '#737373';
         }
 
         ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
@@ -59,7 +58,7 @@ const MatrixRain = () => {
       }
       // Reset shadow for performance
       ctx.shadowBlur = 0;
-      
+
       animationFrameId = requestAnimationFrame(draw);
     };
 
