@@ -229,16 +229,16 @@ export const education = [
   },
   {
     id: "al",
-    degree: "G.C.E. Advanced Level",
-    institution: "Your School Name, Sri Lanka",
-    period: "Your Year",
+    degree: "G.C.E. Advanced Level — Physical Science Stream",
+    institution: "Visakha Vidyalaya, Colombo 05, Sri Lanka",
+    period: "2012 – 2020",
     current: false,
   },
   {
-    id: "ol",
-    degree: "G.C.E. Ordinary Level",
-    institution: "Your School Name, Sri Lanka",
-    period: "Your Year",
+    id: "ucsc",
+    degree: "Certificate Course on Data Science with Python",
+    institution: "University of Colombo School of Computing, Sri Lanka",
+    period: "2023",
     current: false,
   },
 ];
