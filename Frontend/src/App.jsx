@@ -15,12 +15,9 @@ import { MatrixProvider } from './context/MatrixContext';
 import { CursorProvider } from './context/CursorProvider';
 import useKonamiCode from './hooks/useKonamiCode';
 import SmoothScroll from './components/ui/SmoothScroll';
-import { preloadDeferredAssets } from './utils/assetLoader';
-
 // ── Lazy-loaded heavy components ──
 // Three.js bundle (~500KB+) deferred from critical path
 const Background3D = lazy(() => import('./components/Background3D'));
-// Chatbot (~26KB source + triggers ~4MB chatbot avatar loading)
 const PortfolioChatbot = lazy(() => import('./components/chatbot/PortfolioChatbot'));
 // Non-critical overlays
 const MatrixRain = lazy(() => import('./components/ui/MatrixRain'));
@@ -38,17 +35,6 @@ function App() {
       setShowChaos(true);
     }
   }, [konamiTriggered]);
-
-  // ── Start loading deferred assets (chatbot avatar + audio) after page loads ──
-  useEffect(() => {
-    if (!isLoading) {
-      // Small delay to let the main content settle first
-      const timer = setTimeout(() => {
-        preloadDeferredAssets();
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading]);
 
   useEffect(() => {
     if (!isChatOpen) {

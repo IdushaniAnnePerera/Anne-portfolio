@@ -1,8 +1,6 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Mic,
-  MicOff,
   SendHorizontal,
   X,
   Activity,
@@ -10,9 +8,6 @@ import {
 } from 'lucide-react';
 import { BOT_CONFIG } from './data/ChatbotConfig';
 import { buildKnowledgeBase, resolvePortfolioIntent } from './data/chatbotKnowledge';
-import { selectPreferredVoice } from './data/chatbotVoice';
-import { assetCache } from '../../utils/assetLoader';
-import { FemaleAvatar } from './FemaleAvatar';
 
 const TYPING_DELAY_MS = 250;
 const TYPING_SPEED_MS = 8;
@@ -44,194 +39,50 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
 
   const [messages, setMessages] = useState([welcomeMessage]);
   const [promptIds, setPromptIds] = useState(knowledgeBase.defaultPromptIds);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [draft, setDraft] = useState('');
   const [isThinking, setIsThinking] = useState(false);
-  const [availableVoices, setAvailableVoices] = useState([]);
-  const [isClosing, setIsClosing] = useState(false);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   const typingIntervalRef = useRef(null);
   const thinkingTimeoutRef = useRef(null);
   const scrollRef = useRef(null);
-  const audioRef = useRef(null);
-  const openingAudioTimeoutRef = useRef(null);
-  const hasPlayedIntroRef = useRef(false);
 
-  const isBotSpeaking = useMemo(() => isThinking || isAudioPlaying, [isThinking, isAudioPlaying]);
-
-  const clearActivePlayback = useCallback(() => {
-    if (typingIntervalRef.current) {
-      window.clearInterval(typingIntervalRef.current);
-      typingIntervalRef.current = null;
-    }
-    if (thinkingTimeoutRef.current) {
-      window.clearTimeout(thinkingTimeoutRef.current);
-      thinkingTimeoutRef.current = null;
-    }
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    window.speechSynthesis?.cancel?.();
-  }, []);
-
-  const speakReply = useCallback((text, intentId) => {
-    if (!voiceEnabled || !text) return;
-
-    clearActivePlayback();
-    setIsAudioPlaying(false);
-
-    const systemFallback = () => {
-      if (!window.speechSynthesis) return;
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      const selectedVoice = selectPreferredVoice(availableVoices);
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-        utterance.lang = selectedVoice.lang;
-      }
-      utterance.rate = 1.0;
-      utterance.pitch = 1.1;
-
-      utterance.onstart = () => {
-        if (intentId !== 'bot-open') setIsAudioPlaying(true);
-      };
-      utterance.onend = () => setIsAudioPlaying(false);
-      utterance.onerror = () => setIsAudioPlaying(false);
-
-      window.__chatUtterance = utterance;
-      window.speechSynthesis.speak(utterance);
-    };
-
-    const preloadedAudio = assetCache.audio[intentId];
-
-    if (preloadedAudio) {
-      audioRef.current = preloadedAudio;
-      preloadedAudio.currentTime = 0;
-
-      if (intentId !== 'bot-open') setIsAudioPlaying(true);
-
-      const onEnded = () => {
-        setIsAudioPlaying(false);
-        preloadedAudio.removeEventListener('ended', onEnded);
-      };
-      preloadedAudio.addEventListener('ended', onEnded);
-
-      preloadedAudio.play().catch(err => {
-        if (err.name !== 'NotAllowedError') systemFallback();
-        else setIsAudioPlaying(false);
-      });
-    } else {
-      const audioPath = `/assets/audio/chatbot/${intentId}.mp3`;
-      const audio = new Audio(audioPath);
-
-      audio.oncanplaythrough = () => {
-        audioRef.current = audio;
-        if (intentId !== 'bot-open') setIsAudioPlaying(true);
-        audio.onended = () => setIsAudioPlaying(false);
-        audio.play().catch(systemFallback);
-      };
-
-      audio.onerror = () => systemFallback();
-      audio.load();
-    }
-  }, [voiceEnabled, availableVoices, clearActivePlayback]);
-
-  useEffect(() => {
-    if (!voiceEnabled) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      window.speechSynthesis?.cancel?.();
-      setIsAudioPlaying(false);
-    }
-  }, [voiceEnabled]);
-
-  const handleClose = useCallback(() => {
-    if (isClosing) return;
-    setIsClosing(true);
-    speakReply("System shutting down. Bye, see you!", "bot-close");
-
-    window.setTimeout(() => {
-      onOpenChange(false);
-      setMessages([welcomeMessage]);
-      setPromptIds(knowledgeBase.defaultPromptIds);
-      setIsThinking(false);
-      setDraft('');
-      setIsClosing(false);
-    }, 1100);
-  }, [isClosing, speakReply, onOpenChange, welcomeMessage, knowledgeBase]);
-
-  useEffect(() => {
-    if (isOpen) {
-      if (!hasPlayedIntroRef.current) {
-        hasPlayedIntroRef.current = true;
-        openingAudioTimeoutRef.current = window.setTimeout(() => {
-          speakReply("Hello, I am your digital assistant. How can I help you today?", "bot-open");
-        }, 2000);
-      }
-    } else {
-      if (openingAudioTimeoutRef.current) {
-        window.clearTimeout(openingAudioTimeoutRef.current);
-        openingAudioTimeoutRef.current = null;
-      }
-      hasPlayedIntroRef.current = false;
-    }
-  }, [isOpen, speakReply]);
+  const handleClose = () => {
+    if (typingIntervalRef.current) window.clearInterval(typingIntervalRef.current);
+    if (thinkingTimeoutRef.current) window.clearTimeout(thinkingTimeoutRef.current);
+    setMessages([welcomeMessage]);
+    setPromptIds(knowledgeBase.defaultPromptIds);
+    setIsThinking(false);
+    setDraft('');
+    onOpenChange(false);
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: 'smooth'
-      });
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
     }
   }, [messages, isThinking]);
 
   useEffect(() => {
-    if (isOpen) {
-      inputRef.current?.focus();
-    }
+    if (isOpen) inputRef.current?.focus();
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
-
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') handleClose();
-    };
-
+    const onKeyDown = (e) => { if (e.key === 'Escape') handleClose(); };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isOpen, handleClose]);
-
-  useEffect(() => {
-    if (!window.speechSynthesis) return undefined;
-
-    const syncVoices = () => setAvailableVoices(window.speechSynthesis.getVoices());
-    syncVoices();
-    window.speechSynthesis.addEventListener?.('voiceschanged', syncVoices);
-
-    return () => window.speechSynthesis.removeEventListener?.('voiceschanged', syncVoices);
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     return () => {
       if (typingIntervalRef.current) window.clearInterval(typingIntervalRef.current);
       if (thinkingTimeoutRef.current) window.clearTimeout(thinkingTimeoutRef.current);
-      if (openingAudioTimeoutRef.current) window.clearTimeout(openingAudioTimeoutRef.current);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      window.speechSynthesis?.cancel?.();
     };
   }, []);
 
   const typeBotReply = (intent) => {
-    clearActivePlayback();
+    if (typingIntervalRef.current) window.clearInterval(typingIntervalRef.current);
+    if (thinkingTimeoutRef.current) window.clearTimeout(thinkingTimeoutRef.current);
     setIsThinking(true);
 
     thinkingTimeoutRef.current = window.setTimeout(() => {
@@ -243,28 +94,21 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
         return;
       }
 
-      const botMessage = createMessage('bot', '', { isTyping: true, reaction: intent.reaction });
+      const botMessage = createMessage('bot', '', { isTyping: true });
       let nextIndex = 0;
 
       setMessages((current) => [...current, botMessage]);
       setPromptIds(intent.followUps);
 
-      speakReply(intent.reply, intent.id);
-
       typingIntervalRef.current = window.setInterval(() => {
         nextIndex += 1;
         setMessages((current) =>
-          current.map((message) =>
-            message.id === botMessage.id
-              ? {
-                ...message,
-                text: intent.reply.slice(0, nextIndex),
-                isTyping: nextIndex < intent.reply.length,
-              }
-              : message
+          current.map((msg) =>
+            msg.id === botMessage.id
+              ? { ...msg, text: intent.reply.slice(0, nextIndex), isTyping: nextIndex < intent.reply.length }
+              : msg
           )
         );
-
         if (nextIndex >= intent.reply.length) {
           window.clearInterval(typingIntervalRef.current);
           typingIntervalRef.current = null;
@@ -281,12 +125,12 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
     typeBotReply(intent);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const nextDraft = draft.trim();
-    if (!nextDraft) return;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const next = draft.trim();
+    if (!next) return;
     setDraft('');
-    sendMessage(nextDraft);
+    sendMessage(next);
   };
 
   return (
@@ -297,202 +141,166 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
         onClick={() => onOpenChange(true)}
         whileHover={{ scale: 1.05, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className={`fixed bottom-6 right-6 z-[120] hidden items-center gap-4 rounded-3xl border p-2 shadow-2xl backdrop-blur-2xl transition-all duration-500 md:bottom-8 md:right-8 md:flex ${isOpen
+        className={`fixed bottom-6 right-6 z-[120] hidden items-center gap-4 rounded-3xl border p-2 shadow-2xl backdrop-blur-2xl transition-all duration-500 md:bottom-8 md:right-8 md:flex ${
+          isOpen
             ? 'pointer-events-none translate-y-12 opacity-0'
             : 'border-orange-500/30 bg-black/60 text-white'
-          }`}
+        }`}
       >
         <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-orange-500/20 to-gray-600/20">
           <Bot className="h-7 w-7 text-orange-400" />
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-gray-400 shadow-[0_0_10px_#a3a3a3]"
+            className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.8)]"
           />
         </div>
       </motion.button>
 
-      {/* Main Chat Overlay */}
+      {/* Chat Overlay */}
       <AnimatePresence>
         {isOpen && (
           <div className="fixed inset-0 z-[130] hidden items-center justify-center md:flex">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: isClosing ? 0 : 1 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={handleClose}
-              className="absolute inset-0 bg-black/40 backdrop-blur-md"
+              className="absolute inset-0 bg-black/50 backdrop-blur-md"
             />
 
-            <motion.section
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isClosing ? 0.4 : 1 }}
-              exit={{ opacity: 0 }}
-              className="relative flex h-full w-full overflow-hidden text-white"
+            {/* Chat Panel — full width, centred, max-width constrained */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="relative z-10 mx-auto flex h-[85vh] w-full max-w-2xl flex-col rounded-3xl border border-white/10 bg-black/80 backdrop-blur-3xl overflow-hidden shadow-2xl"
             >
-              {/* Left Column: Chat Interface (60%) */}
-              <motion.div
-                animate={{ x: isClosing ? -100 : 0, opacity: isClosing ? 0 : 1 }}
-                transition={{ duration: 0.5, ease: 'easeIn' }}
-                className="relative flex h-full w-full flex-col border-r border-white/5 md:w-[60%] bg-black/60 backdrop-blur-3xl"
-              >
-                {/* Header */}
-                <div className="p-8 md:p-12 pb-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h1 className="text-3xl font-bold tracking-tight text-white/90">Curator AI</h1>
-                      <p className="text-[10px] mt-1 font-bold tracking-[0.3em] text-orange-300/60 uppercase">Advanced Portfolio Assistant</p>
-                    </div>
-                    <button
-                      onClick={handleClose}
-                      className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all hover:bg-white/10 hover:text-white"
-                    >
-                      <X className="h-6 w-6 transition-transform group-hover:rotate-90" />
-                    </button>
-                  </div>
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-white/5 px-8 py-6">
+                <div>
+                  <h2 className="text-xl font-bold tracking-tight text-white/90">Curator AI</h2>
+                  <p className="text-[10px] mt-0.5 font-bold tracking-[0.3em] text-orange-300/60 uppercase">
+                    Portfolio Assistant
+                  </p>
                 </div>
-
-                {/* Chat Messages */}
-                <div
-                  ref={scrollRef}
-                  className="flex-1 overflow-y-auto overscroll-contain p-8 md:p-12 space-y-10 no-scrollbar"
+                <button
+                  onClick={handleClose}
+                  className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all hover:bg-white/10 hover:text-white"
                 >
-                  {messages.map((msg) => (
-                    <motion.div
-                      layout
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      key={msg.id}
-                      className="flex flex-col gap-4"
-                    >
-                      <div className={`flex items-center gap-3 text-[10px] font-bold tracking-[0.25em] uppercase ${msg.role === 'user' ? 'justify-end text-white/40' : 'text-orange-300/60'}`}>
-                        {msg.role === 'bot' && <Activity className="h-3 w-3 animate-pulse" />}
-                        {msg.role === 'user' ? 'ACCESS_REQUEST' : 'CORE_INTERFACE'}
-                      </div>
+                  <X className="h-5 w-5 transition-transform group-hover:rotate-90" />
+                </button>
+              </div>
 
-                      <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[85%] text-base leading-relaxed p-6 rounded-2xl border ${msg.role === 'user'
+              {/* Messages */}
+              <div
+                ref={scrollRef}
+                className="flex-1 overflow-y-auto overscroll-contain space-y-8 px-8 py-8 no-scrollbar"
+              >
+                {messages.map((msg) => (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    key={msg.id}
+                    className="flex flex-col gap-3"
+                  >
+                    <div
+                      className={`flex items-center gap-2 text-[10px] font-bold tracking-[0.25em] uppercase ${
+                        msg.role === 'user' ? 'justify-end text-white/40' : 'text-orange-300/60'
+                      }`}
+                    >
+                      {msg.role === 'bot' && <Activity className="h-3 w-3 animate-pulse" />}
+                      {msg.role === 'user' ? 'YOU' : 'ASSISTANT'}
+                    </div>
+
+                    <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      <div
+                        className={`max-w-[80%] text-sm leading-relaxed px-5 py-4 rounded-2xl border ${
+                          msg.role === 'user'
                             ? 'bg-orange-600/10 border-orange-500/20 text-white/80 rounded-tr-none'
                             : 'bg-white/5 border-white/5 text-white/70 rounded-tl-none font-light'
-                          }`}>
-                          {msg.text}
-                          {msg.isTyping && (
-                            <motion.span
-                              animate={{ opacity: [0, 1, 0] }}
-                              transition={{ repeat: Infinity, duration: 0.8 }}
-                              className="ml-1 inline-block h-4 w-1.5 rounded-full bg-orange-400 align-middle"
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-
-                  {isThinking && (
-                    <div className="flex flex-col gap-4">
-                      <div className="text-[10px] font-bold tracking-[0.25em] uppercase text-orange-300/60 flex items-center gap-3">
-                        <span className="h-2 w-2 rounded-full bg-orange-400 animate-ping" />
-                        PROCESSING_DATA...
-                      </div>
-                      <div className="flex gap-2">
-                        {[0, 1, 2].map((d) => (
-                          <motion.div
-                            key={d}
-                            animate={{ opacity: [0.2, 1, 0.2] }}
-                            transition={{ repeat: Infinity, duration: 0.6, delay: d * 0.1 }}
-                            className="h-1 w-12 rounded-full bg-orange-500/20"
+                        }`}
+                      >
+                        {msg.text}
+                        {msg.isTyping && (
+                          <motion.span
+                            animate={{ opacity: [0, 1, 0] }}
+                            transition={{ repeat: Infinity, duration: 0.8 }}
+                            className="ml-1 inline-block h-3.5 w-1 rounded-full bg-orange-400 align-middle"
                           />
-                        ))}
+                        )}
                       </div>
                     </div>
-                  )}
-                </div>
+                  </motion.div>
+                ))}
 
-                {/* Footer Actions */}
-                <div className="p-8 md:p-12 pt-0 space-y-8">
-                  <div className="flex flex-wrap gap-3">
-                    {promptIds.map((id) => {
-                      const entry = intentMap[id];
-                      if (!entry) return null;
-                      return (
-                        <button
-                          key={id}
-                          onClick={() => {
-                            setMessages((current) => [...current, createMessage('user', entry.label, { isCommand: true })]);
-                            sendMessage(entry.id, true);
-                          }}
-                          className="rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-[11px] font-medium tracking-wider text-white/50 transition-all hover:border-orange-500/30 hover:bg-orange-500/10 hover:text-orange-300"
-                        >
-                          {entry.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <form onSubmit={handleSubmit} className="relative group">
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={draft}
-                      onChange={(e) => setDraft(e.target.value)}
-                      placeholder="Input query for system analysis..."
-                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-8 py-5 text-base text-white placeholder:text-white/20 outline-none transition-all focus:border-orange-500/40"
-                    />
-                    <div className="absolute right-6 top-1/2 flex -translate-y-1/2 items-center gap-4">
-                      <button
-                        type="button"
-                        onClick={() => setVoiceEnabled(!voiceEnabled)}
-                        className={`flex h-10 w-10 items-center justify-center rounded-xl transition-all ${voiceEnabled ? 'text-orange-400 bg-orange-500/10' : 'text-white/20'}`}
-                      >
-                        {voiceEnabled ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
-                      </button>
-                      <button
-                        type="submit"
-                        className="flex h-10 w-10 items-center justify-center text-white/40 hover:text-orange-400 transition-colors"
-                      >
-                        <SendHorizontal className="h-6 w-6" />
-                      </button>
+                {isThinking && (
+                  <div className="flex flex-col gap-3">
+                    <div className="text-[10px] font-bold tracking-[0.25em] uppercase text-orange-300/60 flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-orange-400 animate-ping" />
+                      Thinking…
                     </div>
-                  </form>
-                </div>
-              </motion.div>
-
-              {/* Right Column: Female Avatar (40%) */}
-              <div className="relative hidden md:block w-[52%] h-full bg-black overflow-hidden">
-                {/* Avatar */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <FemaleAvatar isSpeaking={isBotSpeaking} isClosing={isClosing} />
-                </div>
-
-                {/* Gradient overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent pointer-events-none" />
-
-                {/* Status Markers */}
-                <div className="absolute right-12 top-12 flex flex-col items-end gap-3 pointer-events-none">
-                  <div className="flex items-center gap-4 rounded-full border border-white/10 bg-black/60 px-6 py-2.5 backdrop-blur-xl">
-                    <div className={`h-2.5 w-2.5 rounded-full ${isBotSpeaking ? 'bg-orange-400 animate-pulse shadow-[0_0_15px_#fb923c]' : 'bg-white/20'}`} />
-                    <span className="text-[11px] font-bold tracking-[0.25em] text-white/90 uppercase">
-                      {isBotSpeaking ? 'LINK_ACTIVE' : 'SYSTEM_IDLE'}
-                    </span>
+                    <div className="flex gap-1.5">
+                      {[0, 1, 2].map((d) => (
+                        <motion.div
+                          key={d}
+                          animate={{ opacity: [0.2, 1, 0.2] }}
+                          transition={{ repeat: Infinity, duration: 0.6, delay: d * 0.12 }}
+                          className="h-1 w-10 rounded-full bg-orange-500/25"
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <div className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em]">
-                    DIGITAL_TWIN v2.4.0
-                  </div>
-                </div>
-
-                {/* Tech specs overlay */}
-                <div className="absolute left-10 bottom-12 space-y-2 pointer-events-none">
-                  <div className="text-[9px] font-mono text-orange-300/40 uppercase tracking-widest">Anne Perera — CS @ Kelaniya</div>
-                  <div className="h-0.5 w-12 bg-orange-500/20" />
-                  <div className="text-[9px] font-mono text-white/20 uppercase tracking-widest">AI • Full-Stack • Research</div>
-                </div>
-
-                {/* Decorative Grid */}
-                <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:48px_48px]" />
+                )}
               </div>
-            </motion.section>
+
+              {/* Footer */}
+              <div className="border-t border-white/5 px-8 py-6 space-y-5">
+                {/* Quick-action chips */}
+                <div className="flex flex-wrap gap-2">
+                  {promptIds.map((id) => {
+                    const entry = intentMap[id];
+                    if (!entry) return null;
+                    return (
+                      <button
+                        key={id}
+                        onClick={() => {
+                          setMessages((current) => [
+                            ...current,
+                            createMessage('user', entry.label, { isCommand: true }),
+                          ]);
+                          sendMessage(entry.id, true);
+                        }}
+                        className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-medium tracking-wider text-white/50 transition-all hover:border-orange-500/30 hover:bg-orange-500/10 hover:text-orange-300"
+                      >
+                        {entry.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Input */}
+                <form onSubmit={handleSubmit} className="relative">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={draft}
+                    onChange={(e) => setDraft(e.target.value)}
+                    placeholder="Ask me anything…"
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 pr-16 text-sm text-white placeholder:text-white/25 outline-none transition-all focus:border-orange-500/40 focus:bg-white/8"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-xl text-white/40 hover:text-orange-400 transition-colors"
+                  >
+                    <SendHorizontal className="h-5 w-5" />
+                  </button>
+                </form>
+              </div>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>

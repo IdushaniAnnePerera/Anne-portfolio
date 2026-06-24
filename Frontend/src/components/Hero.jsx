@@ -1,316 +1,79 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion as Motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { useRef } from 'react';
+import { motion as Motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, Github, Linkedin, Mail, Sparkles, Terminal, Shield } from 'lucide-react';
 import { profile } from '../data/portfolio';
 import { useCursor } from '../context/CursorContext.jsx';
 
-import { assetCache } from '../utils/assetLoader';
-
 // ─────────────────────────────────────────────────────────────
-// AboutAvatar: Simple 36-50 loop from avatar-move set ONLY
+// AboutAvatar — floating photo used in the About section
 // ─────────────────────────────────────────────────────────────
-export const AboutAvatar = ({ isVisible = false }) => {
-  const canvasRef = useRef(null);
-  const frameRef = useRef(35);
-  const [isReady, setIsReady] = useState(false);
-  const [photoError, setPhotoError] = useState(false);
-
-  const draw = useCallback((index) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !assetCache.heroMove[index]) return;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(assetCache.heroMove[index], 0, 0, canvas.width, canvas.height);
-  }, []);
-
-  useEffect(() => {
-    const handleReady = () => {
-      if (assetCache.isLoaded || assetCache.heroMove.length > 0) {
-        setIsReady(true);
-        draw(35);
-      }
-    };
-
-    handleReady();
-    assetCache.listeners.push(handleReady);
-    return () => {
-      assetCache.listeners = assetCache.listeners.filter(l => l !== handleReady);
-    };
-  }, [draw]);
-
-  useEffect(() => {
-    if (!isReady || !photoError) return;
-    const interval = setInterval(() => {
-      frameRef.current = frameRef.current >= 49 ? 35 : frameRef.current + 1;
-      draw(frameRef.current);
-    }, 100);
-    return () => clearInterval(interval);
-  }, [isReady, photoError, draw]);
-
-  if (!photoError) {
-    return (
-      <img
-        src={profile.image}
-        alt={profile.name}
-        onError={() => setPhotoError(true)}
-        className="w-full h-auto object-cover rounded-full transition-opacity duration-1000 ease-in-out"
-        style={{
-          opacity: isVisible ? 1 : 0,
-          boxShadow: '0 0 60px rgba(251,146,60,0.25), 0 0 120px rgba(251,146,60,0.1)',
-          border: '2px solid rgba(251,146,60,0.35)',
-          WebkitMaskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
-          maskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
-        }}
-      />
-    );
-  }
-
-  return (
-    <canvas
-      ref={canvasRef}
-      width={1200}
-      height={1200}
-      className="w-full h-auto object-cover transition-opacity duration-1000 ease-in-out"
+export const AboutAvatar = ({ isVisible = false }) => (
+  <Motion.div
+    className="relative flex items-center justify-center"
+    animate={isVisible ? { y: [0, -10, 0] } : {}}
+    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+    style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.8s ease' }}
+  >
+    {/* Glow ring */}
+    <div
+      className="absolute inset-[-6px] rounded-full border border-orange-500/25 pointer-events-none"
+      style={{ boxShadow: '0 0 30px rgba(251,146,60,0.12)' }}
+    />
+    <img
+      src={profile.image}
+      alt={profile.name}
+      className="w-full h-auto object-cover rounded-full"
       style={{
-        opacity: isVisible ? 1 : 0,
-        filter: 'contrast(1.15) brightness(1.05)',
-        WebkitMaskImage: 'radial-gradient(circle at center, black 50%, transparent 80%)',
-        maskImage: 'radial-gradient(circle at center, black 50%, transparent 80%)',
+        border: '2px solid rgba(251,146,60,0.4)',
+        boxShadow: '0 0 40px rgba(251,146,60,0.2)',
       }}
     />
-  );
-};
+  </Motion.div>
+);
 
 // ─────────────────────────────────────────────────────────────
-// HeroAvatar: Full lifecycle (idle loop → scroll scrub + move)
-// Uses viewport-relative positioning so the path is consistent
-// across ALL screen sizes (14", 16", ultrawide, etc.)
+// HeroAvatar — circular photo, floating bob, scroll fade+scale
 // ─────────────────────────────────────────────────────────────
 const HeroAvatar = ({ scrollYProgress }) => {
-  const canvasRef = useRef(null);
-  const wrapperRef = useRef(null);
-  const frameRef = useRef(0);
-  const intervalRef = useRef(null);
-  const [isReady, setIsReady] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [photoError, setPhotoError] = useState(false);
-
-  const drawHero = useCallback((index) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !assetCache.heroIdle[index]) return;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(assetCache.heroIdle[index], 0, 0, canvas.width, canvas.height);
-  }, []);
-
-  const drawMove = useCallback((index) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !assetCache.heroMove[index]) return;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(assetCache.heroMove[index], 0, 0, canvas.width, canvas.height);
-  }, []);
-
-  // Reactive check for assets
-  useEffect(() => {
-    const handleReady = () => {
-      if (assetCache.isLoaded || assetCache.heroIdle.length > 0) {
-        setIsReady(true);
-        drawHero(0);
-      }
-    };
-
-    handleReady();
-    assetCache.listeners.push(handleReady);
-    return () => {
-      assetCache.listeners = assetCache.listeners.filter(l => l !== handleReady);
-    };
-  }, [drawHero]);
-
-  // ── Hero idle loop (30 frames) ──
-  const startLoop = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      frameRef.current = (frameRef.current + 1) % 30;
-      drawHero(frameRef.current);
-    }, 100);
-  }, [drawHero]);
-
-  const stopLoop = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }, []);
-
-  // Start loop when ready and not scrolling
-  useEffect(() => {
-    if (isReady && !isScrolling) {
-      startLoop();
-    }
-    return () => stopLoop();
-  }, [isReady, isScrolling, startLoop, stopLoop]);
-
-  // ── Scroll detection + Move frame scrubbing ──
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (!isReady) return;
-
-    if (v < 0.01) {
-      // At top → hero idle loop
-      if (isScrolling) setIsScrolling(false);
-    } else {
-      // Scrolling → stop hero loop, scrub move frames
-      if (!isScrolling) setIsScrolling(true);
-
-      // Map scroll 0.01→1.0 to move frames 0→49
-      const moveFrame = Math.min(49, Math.floor((v / 1.0) * 50));
-      drawMove(moveFrame);
-    }
-  });
-
-  // ── Responsive travel-distance calculation ──
-  // Dynamically measure where the avatar needs to travel from hero → about profile card
-  // This ensures consistent positioning across ALL screen sizes
-  const [isMobile, setIsMobile] = useState(false);
-  const [travelY, setTravelY] = useState({ mid: 400, end: 930 });
-  const [travelX, setTravelX] = useState({ mid: 30, end: 25 });
-  const [travelScale, setTravelScale] = useState({ s1: 0.7, s2: 0.35, s3: 0.45 });
-
-  useEffect(() => {
-    const calculatePath = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const mobile = vw < 1024;
-      setIsMobile(mobile);
-
-      if (mobile) {
-        // Mobile: stacked layout, shorter Y travel, no X drift
-        setTravelY({ mid: vh * 0.35, end: vh * 0.65 });
-        setTravelX({ mid: 0, end: 0 });
-        setTravelScale({ s1: 0.95, s2: 0.92, s3: 0.87 });
-        return;
-      }
-
-      // ── Desktop: dynamically measure start → end positions ──
-      const heroAvatar = wrapperRef.current;
-      const aboutCard = document.querySelector('[data-avatar-target="profile-card"]');
-
-      if (heroAvatar && aboutCard) {
-        const heroRect = heroAvatar.getBoundingClientRect();
-        const aboutRect = aboutCard.getBoundingClientRect();
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-        // Calculate actual pixel distance from hero avatar center to about card center
-        const heroCenterY = heroRect.top + scrollTop + heroRect.height / 2;
-        const aboutCenterY = aboutRect.top + scrollTop + aboutRect.height / 2;
-        const heroCenterX = heroRect.left + heroRect.width / 2;
-        const aboutCenterX = aboutRect.left + aboutRect.width / 2;
-
-        const deltaY = aboutCenterY - heroCenterY;
-        const deltaX = aboutCenterX - heroCenterX;
-
-        // The avatar path follows a smooth curve from hero→about
-        // Mid-point is ~50% of the journey
-        setTravelY({ mid: deltaY * 0.5, end: deltaY * 0.95 });
-        setTravelX({ mid: deltaX * 0.3, end: deltaX * 0.7 });
-      } else {
-        // Fallback: use viewport-relative values that scale with screen size
-        // These use vh/vw proportions instead of hardcoded pixels
-        setTravelY({ mid: vh * 0.4, end: vh * 0.75 });
-        setTravelX({ mid: vw * 0.025, end: vw * 0.025 });
-      }
-
-      // Scale down proportionally — larger screens need slightly larger end scale
-      // because the about card is physically larger
-      const scaleFactor = Math.max(0.8, Math.min(1, vw / 1536));
-      setTravelScale({
-        s1: 0.7 * scaleFactor,
-        s2: 0.5 * scaleFactor,
-        s3: 0.35 * scaleFactor,
-      });
-    };
-
-    // Initial calculation + debounced recalculation on resize
-    calculatePath();
-    // Recalculate after a short delay to ensure DOM is fully rendered
-    const initTimer = setTimeout(calculatePath, 500);
-
-    let resizeTimer;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(calculatePath, 150);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(resizeTimer);
-      clearTimeout(initTimer);
-    };
-  }, []);
-
-  // ── Scroll-driven positioning using dynamic values ──
-  const avatarY = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    isMobile ? [0, travelY.mid, travelY.end] : [0, travelY.mid, travelY.end]
-  );
-  const avatarX = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    isMobile ? [0, 0, 0] : [0, travelX.mid, travelX.end]
-  );
-  const avatarScale = useTransform(
-    scrollYProgress,
-    [0, 0.5, 0.8, 1],
-    isMobile ? [1, 0.95, 0.92, 0.87] : [1, travelScale.s1, travelScale.s2, travelScale.s3]
-  );
-  const avatarOpacity = useTransform(
-    scrollYProgress,
-    isMobile ? [0, 0.5, 0.7, 0.85] : [0, 0.7, 0.85, 1],
-    [1, 1, 0.5, 0]
-  );
+  const opacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
+  const scale   = useTransform(scrollYProgress, [0, 0.45], [1, 0.82]);
 
   return (
     <Motion.div
-      ref={wrapperRef}
-      style={{
-        y: avatarY,
-        x: avatarX,
-        scale: avatarScale,
-        opacity: avatarOpacity,
-      }}
-      className="relative w-full flex justify-center z-50"
+      style={{ opacity, scale }}
+      className="relative flex items-center justify-center w-full"
     >
-      {!isReady && !photoError && (
-        <div className="absolute inset-0 bg-neon-blue/10 animate-pulse blur-3xl rounded-full scale-50" />
-      )}
-      {!photoError ? (
+      {/* Inner breathing glow ring */}
+      <Motion.div
+        className="absolute rounded-full border border-orange-500/40 pointer-events-none"
+        style={{ inset: '-10px' }}
+        animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.03, 1] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      {/* Outer breathing glow ring */}
+      <Motion.div
+        className="absolute rounded-full border border-orange-300/15 pointer-events-none"
+        style={{ inset: '-22px' }}
+        animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.05, 1] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
+      />
+
+      {/* Floating photo */}
+      <Motion.div
+        animate={{ y: [0, -14, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
         <img
           src={profile.image}
           alt={profile.name}
-          onError={() => setPhotoError(true)}
-          className="w-[340px] h-[340px] md:w-[460px] md:h-[460px] object-cover rounded-full pointer-events-none md:scale-150"
+          className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 object-cover rounded-full pointer-events-none"
           style={{
-            boxShadow: '0 0 80px rgba(251,146,60,0.3), 0 0 160px rgba(251,146,60,0.1)',
-            border: '2px solid rgba(251,146,60,0.4)',
-            WebkitMaskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
-            maskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
+            border: '3px solid rgba(251,146,60,0.5)',
+            boxShadow:
+              '0 0 60px rgba(251,146,60,0.30), 0 0 120px rgba(251,146,60,0.12)',
           }}
         />
-      ) : (
-        <canvas
-          ref={canvasRef}
-          width={1200}
-          height={1200}
-          className="w-full max-w-[1600px] h-auto mix-blend-screen md:scale-150 pointer-events-none"
-          style={{
-            WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 75%)',
-            maskImage: 'radial-gradient(circle at center, black 40%, transparent 75%)',
-            filter: isReady ? 'contrast(1.15) brightness(1.05)' : 'contrast(1) brightness(0.5) grayscale(1)',
-          }}
-        />
-      )}
+      </Motion.div>
     </Motion.div>
   );
 };
@@ -326,25 +89,18 @@ const Hero = () => {
   });
   const { setCursorType } = useCursor();
 
-  // Parallax & Transition values
   const yText = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
 
-  // Magnetic button
   const xSpring = useSpring(0, { stiffness: 150, damping: 20 });
   const ySpring = useSpring(0, { stiffness: 150, damping: 20 });
 
   const handleMagnetic = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    xSpring.set(x * 0.35);
-    ySpring.set(y * 0.35);
+    xSpring.set((e.clientX - rect.left - rect.width / 2) * 0.35);
+    ySpring.set((e.clientY - rect.top - rect.height / 2) * 0.35);
   };
 
-  const resetMagnetic = () => {
-    xSpring.set(0);
-    ySpring.set(0);
-  };
+  const resetMagnetic = () => { xSpring.set(0); ySpring.set(0); };
 
   return (
     <section
@@ -368,7 +124,7 @@ const Hero = () => {
               style={{ y: yText }}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
               onMouseEnter={() => setCursorType('text')}
               onMouseLeave={() => setCursorType('default')}
             >
@@ -419,15 +175,17 @@ const Hero = () => {
               <HeroAvatar scrollYProgress={scrollYProgress} />
             </Motion.div>
           </div>
+
         </div>
       </div>
 
+      {/* Scroll indicator */}
       <Motion.a
         href="#about"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
-        className="hidden absolute  md:bottom-12 left-1/2 -translate-x-1/2 md:flex flex-col items-center gap-3 text-gray-500 hover:text-white transition-colors"
+        className="hidden absolute md:bottom-12 left-1/2 -translate-x-1/2 md:flex flex-col items-center gap-3 text-gray-500 hover:text-white transition-colors"
       >
         <span className="text-[10px] uppercase font-mono tracking-[0.4em] vertical-text">Explore</span>
         <div className="w-[1px] h-16 bg-gradient-to-b from-gray-700 to-transparent relative">
