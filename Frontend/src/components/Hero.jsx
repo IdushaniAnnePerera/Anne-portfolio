@@ -5,47 +5,45 @@ import { profile } from '../data/portfolio';
 import { useCursor } from '../context/CursorContext.jsx';
 
 // ─────────────────────────────────────────────────────────────
-// Floating tech-stack icons strip
+// Floating tech-icon background layer
 // ─────────────────────────────────────────────────────────────
-const TECH_STACK = [
-  { label: 'Spring Boot', img: '/assets/spring-logo.png' },
-  { label: 'Docker',      img: '/assets/docker_icon-removebg-preview.png' },
-  { label: 'Linux',       img: '/assets/linux-logo-removebg-preview.png' },
-  { label: 'React',       dot: '#61DAFB' },
-  { label: 'Python',      dot: '#3776AB' },
-  { label: 'PyTorch',     dot: '#EE4C2C' },
-  { label: 'AWS',         dot: '#FF9900' },
-  { label: 'Java',        dot: '#ED8B00' },
-  { label: 'TypeScript',  dot: '#3178C6' },
-  { label: 'MongoDB',     dot: '#47A248' },
+const FLOATING_ICONS = [
+  // Left edge
+  { src: '/assets/docker_icon-removebg-preview.png',      top: '10%',  left: '2%',  size: 44, dur: 18, delay: 0,   dx: 18  },
+  { src: '/assets/linux-logo-removebg-preview.png',        top: '48%',  left: '1%',  size: 40, dur: 22, delay: 2.5, dx: 14  },
+  { src: '/assets/spring-logo.png',                        top: '76%',  left: '3%',  size: 46, dur: 20, delay: 1,   dx: 16  },
+  // Right edge
+  { src: '/assets/nestjs-logo-removebg-preview.png',       top: '18%',  left: '91%', size: 42, dur: 25, delay: 1.5, dx: -18 },
+  { src: '/assets/docker_icon-removebg-preview.png',       top: '60%',  left: '93%', size: 36, dur: 19, delay: 3.5, dx: -14 },
+  { src: '/assets/linux-logo-removebg-preview.png',        top: '36%',  left: '89%', size: 38, dur: 23, delay: 0.5, dx: -16 },
+  // Top band
+  { src: '/assets/spring-logo.png',                        top: '5%',   left: '28%', size: 32, dur: 26, delay: 1,   dx: -10 },
+  { src: '/assets/nestjs-logo-removebg-preview.png',       top: '7%',   left: '64%', size: 34, dur: 21, delay: 2,   dx: 12  },
+  // Bottom band
+  { src: '/assets/Windows_Subsystem_for_Linux_logo.png',   top: '87%',  left: '38%', size: 40, dur: 24, delay: 3,   dx: 14  },
+  { src: '/assets/docker_icon-removebg-preview.png',       top: '91%',  left: '68%', size: 34, dur: 22, delay: 1.5, dx: -12 },
+  { src: '/assets/spring-logo.png',                        top: '84%',  left: '80%', size: 30, dur: 27, delay: 0.8, dx: -8  },
 ];
 
-const FloatingIcons = () => (
-  <div className="mt-8 md:mt-10">
-    <p className="text-[9px] font-mono font-bold text-white/20 uppercase tracking-[0.3em] mb-3">Tech Stack</p>
-    <div className="flex flex-wrap gap-2">
-      {TECH_STACK.map((tech, i) => (
-        <Motion.div
-          key={tech.label}
-          animate={{ y: [0, -(4 + (i % 3) * 2), 0] }}
-          transition={{
-            duration: 2.4 + i * 0.22,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: i * 0.12,
-          }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/8 hover:border-orange-400/30 hover:bg-orange-400/5 transition-colors cursor-default"
-        >
-          {tech.img ? (
-            <img src={tech.img} alt={tech.label} className="w-3.5 h-3.5 object-contain" />
-          ) : (
-            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: tech.dot }} />
-          )}
-          <span className="text-[10px] font-mono font-semibold text-gray-400">{tech.label}</span>
-        </Motion.div>
-      ))}
-    </div>
-  </div>
+const TechBackground = () => (
+  <>
+    {FLOATING_ICONS.map((icon, i) => (
+      <Motion.div
+        key={i}
+        className="absolute pointer-events-none select-none"
+        style={{ top: icon.top, left: icon.left }}
+        animate={{ x: [0, icon.dx, 0, icon.dx * -0.4, 0] }}
+        transition={{ duration: icon.dur, repeat: Infinity, ease: 'easeInOut', delay: icon.delay }}
+      >
+        <img
+          src={icon.src}
+          alt=""
+          draggable={false}
+          style={{ width: icon.size, height: icon.size, objectFit: 'contain', opacity: 0.65 }}
+        />
+      </Motion.div>
+    ))}
+  </>
 );
 
 // ─────────────────────────────────────────────────────────────
@@ -153,10 +151,11 @@ const Hero = () => {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-y-visible z-30 px-4 md:px-20 selection:bg-neon-blue/30"
     >
       {/* Background Layers */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 hero-grid opacity-[0.10]" />
         <div className="absolute top-[20%] left-[-10%] w-[40vw] h-[40vw] bg-neon-blue/5 blur-[120px] rounded-full" />
         <div className="absolute bottom-[10%] right-[-10%] w-[40vw] h-[40vw] bg-neon-purple/5 blur-[120px] rounded-full" />
+        <TechBackground />
       </div>
 
       <div className="container relative z-10 mx-auto px-6 py-16 md:py-20">
@@ -225,7 +224,6 @@ const Hero = () => {
                 </a>
               </div>
 
-              <FloatingIcons />
             </Motion.div>
           </div>
 
