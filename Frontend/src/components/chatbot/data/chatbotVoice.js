@@ -13,20 +13,25 @@ function scoreVoice(voice) {
   else if (lang.startsWith('en-us')) score += 80;
   else if (lang.startsWith('en')) score += 60;
 
-  // New: Prioritize high-quality "Neural" or "Natural" voices
+  // High-quality voices
   if (name.includes('neural')) score += 200;
   if (name.includes('natural')) score += 180;
   if (name.includes('online')) score += 100;
 
-  // Pivot to MALE voices
-  if (name.includes('male')) score += 100;
-  if (name.includes('guy')) score += 80;
-  if (name.includes('david')) score += 60;
-  if (name.includes('mark')) score += 60;
-  if (name.includes('george')) score += 60;
-  if (name.includes('james')) score += 60;
+  // Prefer female voices
+  if (name.includes('female')) score += 100;
+  if (name.includes('woman')) score += 80;
+  if (name.includes('zira')) score += 80;       // Microsoft Zira (female)
+  if (name.includes('samantha')) score += 80;   // Apple Samantha (female)
+  if (name.includes('aria')) score += 80;       // Microsoft Aria Neural (female)
+  if (name.includes('jenny')) score += 80;      // Microsoft Jenny (female)
+  if (name.includes('emma')) score += 80;       // Google/Microsoft Emma (female)
+  if (name.includes('hazel')) score += 60;      // Microsoft Hazel (female)
+  if (name.includes('sonia')) score += 60;      // Microsoft Sonia (female)
+  if (name.includes('susan')) score += 60;
+  if (name.includes('victoria')) score += 60;
 
-  if (name.includes('google')) score += 40; 
+  if (name.includes('google')) score += 40;
   if (name.includes('microsoft')) score += 30;
   if (voice?.localService) score += 8;
   if (voice?.default) score += 6;

@@ -6,19 +6,16 @@ import {
   SendHorizontal,
   X,
   Activity,
-  Command,
   Bot
 } from 'lucide-react';
-// import { profile } from '../../data/portfolio';
 import { BOT_CONFIG } from './data/ChatbotConfig';
 import { buildKnowledgeBase, resolvePortfolioIntent } from './data/chatbotKnowledge';
 import { selectPreferredVoice } from './data/chatbotVoice';
 import { assetCache } from '../../utils/assetLoader';
+import { FemaleAvatar } from './FemaleAvatar';
 
 const TYPING_DELAY_MS = 250;
 const TYPING_SPEED_MS = 8;
-
-// No local loading logic needed anymore
 
 function createMessage(role, text, extras = {}) {
   return {
@@ -52,18 +49,14 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
   const [isThinking, setIsThinking] = useState(false);
   const [availableVoices, setAvailableVoices] = useState([]);
   const [isClosing, setIsClosing] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   const typingIntervalRef = useRef(null);
   const thinkingTimeoutRef = useRef(null);
   const scrollRef = useRef(null);
-  const canvasRef = useRef(null);
   const audioRef = useRef(null);
   const openingAudioTimeoutRef = useRef(null);
-  const frameRef = useRef(0);
   const hasPlayedIntroRef = useRef(false);
-  const [isReady, setIsReady] = useState(false);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const [characterMode, setCharacterMode] = useState('bot'); // 'bot' or 'hero'
 
   const isBotSpeaking = useMemo(() => isThinking || isAudioPlaying, [isThinking, isAudioPlaying]);
 
@@ -86,24 +79,20 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
   const speakReply = useCallback((text, intentId) => {
     if (!voiceEnabled || !text) return;
 
-    // 1. Clear previous playback
     clearActivePlayback();
     setIsAudioPlaying(false);
 
-    // 2. Fallback logic: Only use TTS if local audio is unavailable
     const systemFallback = () => {
-      // Final guard: if browser is already speaking or if we explicitly don't want fallback
       if (!window.speechSynthesis) return;
 
-      console.log(`[Audio] Using system voice fallback for: ${intentId}`);
       const utterance = new SpeechSynthesisUtterance(text);
       const selectedVoice = selectPreferredVoice(availableVoices);
       if (selectedVoice) {
         utterance.voice = selectedVoice;
         utterance.lang = selectedVoice.lang;
       }
-      utterance.rate = 1.05;
-      utterance.pitch = 0.85;
+      utterance.rate = 1.0;
+      utterance.pitch = 1.1;
 
       utterance.onstart = () => {
         if (intentId !== 'bot-open') setIsAudioPlaying(true);
@@ -111,17 +100,13 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
       utterance.onend = () => setIsAudioPlaying(false);
       utterance.onerror = () => setIsAudioPlaying(false);
 
-      // Fix for Chrome GC bug: hold a global reference to the utterance
       window.__chatUtterance = utterance;
-
       window.speechSynthesis.speak(utterance);
     };
 
-    // 3. Attempt local playback (Preloaded or On-demand)
     const preloadedAudio = assetCache.audio[intentId];
 
     if (preloadedAudio) {
-      console.log(`[Audio] Playing preloaded asset: ${intentId}`);
       audioRef.current = preloadedAudio;
       preloadedAudio.currentTime = 0;
 
@@ -133,20 +118,12 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
       };
       preloadedAudio.addEventListener('ended', onEnded);
 
-      // If preloaded, we assume it exists. If it fails (e.g. autoplay), 
-      // we only fallback if it's a critical failure.
       preloadedAudio.play().catch(err => {
-        console.warn("[Audio] Preloaded play failed:", err);
-        // Don't necessarily fallback to TTS for autoplay errors, 
-        // usually if preloaded exists, we want THAT or nothing.
-        // But for safety, we fallback if it's not and autoplay issue.
         if (err.name !== 'NotAllowedError') systemFallback();
         else setIsAudioPlaying(false);
       });
     } else {
-      // Intent not in cache, try one-off load
       const audioPath = `/assets/audio/chatbot/${intentId}.mp3`;
-      console.log(`[Audio] Checking local file: ${audioPath}`);
       const audio = new Audio(audioPath);
 
       audio.oncanplaythrough = () => {
@@ -156,17 +133,11 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
         audio.play().catch(systemFallback);
       };
 
-      audio.onerror = () => {
-        console.warn(`[Audio] Local file not found at ${audioPath}`);
-        systemFallback();
-      };
-
+      audio.onerror = () => systemFallback();
       audio.load();
     }
   }, [voiceEnabled, availableVoices, clearActivePlayback]);
 
-  // Immediately kill any currently playing audio if the user clicks Mute
-  // But do NOT kill the typing interval — let the text finish rendering
   useEffect(() => {
     if (!voiceEnabled) {
       if (audioRef.current) {
@@ -181,50 +152,20 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
   const handleClose = useCallback(() => {
     if (isClosing) return;
     setIsClosing(true);
-
-    // Play global exit voice
     speakReply("System shutting down. Bye, see you!", "bot-close");
 
-    // Force frame to 30 if we're deeper in the loop, to start the reverse sequence
-    if (frameRef.current > 29) {
-      frameRef.current = 29;
-    }
-  }, [isClosing, speakReply]);
+    window.setTimeout(() => {
+      onOpenChange(false);
+      setMessages([welcomeMessage]);
+      setPromptIds(knowledgeBase.defaultPromptIds);
+      setIsThinking(false);
+      setDraft('');
+      setIsClosing(false);
+    }, 1100);
+  }, [isClosing, speakReply, onOpenChange, welcomeMessage, knowledgeBase]);
 
-  const drawFrame = useCallback((index, set = 'bot') => {
-    const canvas = canvasRef.current;
-    const images = set === 'bot' ? assetCache.chatbotAvatar : assetCache.heroIdle;
-    if (!canvas || !images[index]) return;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(images[index], 0, 0, canvas.width, canvas.height);
-  }, []);
-
-  // Reactive check for assets
-  useEffect(() => {
-    const handleReady = () => {
-      if (assetCache.isLoaded || assetCache.chatbotAvatar.length > 0) {
-        setIsReady(true);
-        drawFrame(0);
-      }
-    };
-
-    handleReady();
-    assetCache.listeners.push(handleReady);
-    return () => {
-      assetCache.listeners = assetCache.listeners.filter(l => l !== handleReady);
-    };
-  }, [drawFrame]);
-
-  // Reset animation and play greeting when opening
   useEffect(() => {
     if (isOpen) {
-      frameRef.current = 0;
-      setIsClosing(false);
-      setCharacterMode('bot'); // Always start as bot
-      if (isReady) drawFrame(0, 'bot');
-
-      // Play intro audio ONLY on first open, not on mute/unmute toggles
       if (!hasPlayedIntroRef.current) {
         hasPlayedIntroRef.current = true;
         openingAudioTimeoutRef.current = window.setTimeout(() => {
@@ -232,88 +173,13 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
         }, 2000);
       }
     } else {
-      // Clear timeout if closed early
       if (openingAudioTimeoutRef.current) {
         window.clearTimeout(openingAudioTimeoutRef.current);
         openingAudioTimeoutRef.current = null;
       }
-      // Reset intro flag so it plays again on next open
       hasPlayedIntroRef.current = false;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, isReady, drawFrame]);
-
-  // Frame animation loop
-  useEffect(() => {
-    if (!isReady) return undefined;
-
-    const interval = setInterval(() => {
-      let nextFrame = frameRef.current;
-      let nextMode = characterMode;
-
-      if (isClosing) {
-        // Shutdown logic: Reverse frames 30 -> 1 (indices 29 -> 0)
-        // We ALWAYS use bot assets for the final shutdown regardless of characterMode
-        if (nextFrame > 0) {
-          nextFrame -= 1;
-          nextMode = 'bot';
-        } else {
-          onOpenChange(false);
-          setMessages([welcomeMessage]);
-          setPromptIds(knowledgeBase.defaultPromptIds);
-          setIsThinking(false);
-          setDraft('');
-          clearInterval(interval);
-          return;
-        }
-      } else if (!voiceEnabled) {
-        // Voice OFF: Human Avatar Mode
-        if (nextMode === 'bot') {
-          // Phase 1: Power down current bot
-          if (nextFrame > 0) {
-            nextFrame -= 1;
-          } else {
-            // Phase 2: Switch to Hero
-            nextMode = 'hero';
-            nextFrame = 0;
-          }
-        } else {
-          // Phase 3: Loop Hero Idle (0-29)
-          nextFrame = (nextFrame + 1) % 30;
-        }
-      } else {
-        // Voice ON: AI Bot Mode
-        if (nextMode === 'hero') {
-          // Switch back to bot opening state
-          nextMode = 'bot';
-          nextFrame = 0;
-        }
-
-        if (isBotSpeaking) {
-          // Loop speaking frames: 31 to 50 (indices 30 to 49)
-          if (nextFrame < 30 || nextFrame >= 49) {
-            nextFrame = 30;
-          } else {
-            nextFrame += 1;
-          }
-        } else {
-          // Opening + Idle logic
-          // Play opening frames 1-30 (indices 0-29), then jump to idle frame 40 (index 39)
-          if (nextFrame < 29) {
-            nextFrame += 1;
-          } else {
-            nextFrame = 39;
-          }
-        }
-      }
-
-      frameRef.current = nextFrame;
-      setCharacterMode(nextMode);
-      drawFrame(nextFrame, nextMode);
-    }, isClosing ? 50 : (characterMode === 'hero' ? 80 : 120));
-
-    return () => clearInterval(interval);
-  }, [isReady, isBotSpeaking, isClosing, voiceEnabled, characterMode, drawFrame, onOpenChange, welcomeMessage, knowledgeBase]);
+  }, [isOpen, speakReply]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -334,9 +200,7 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
     if (!isOpen) return undefined;
 
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        handleClose();
-      }
+      if (event.key === 'Escape') handleClose();
     };
 
     window.addEventListener('keydown', onKeyDown);
@@ -346,16 +210,11 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
   useEffect(() => {
     if (!window.speechSynthesis) return undefined;
 
-    const syncVoices = () => {
-      setAvailableVoices(window.speechSynthesis.getVoices());
-    };
-
+    const syncVoices = () => setAvailableVoices(window.speechSynthesis.getVoices());
     syncVoices();
     window.speechSynthesis.addEventListener?.('voiceschanged', syncVoices);
 
-    return () => {
-      window.speechSynthesis.removeEventListener?.('voiceschanged', syncVoices);
-    };
+    return () => window.speechSynthesis.removeEventListener?.('voiceschanged', syncVoices);
   }, []);
 
   useEffect(() => {
@@ -370,11 +229,6 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
       window.speechSynthesis?.cancel?.();
     };
   }, []);
-
-
-  const resolveIntent = (rawText = '') => {
-    return resolvePortfolioIntent(rawText, knowledgeBase);
-  };
 
   const typeBotReply = (intent) => {
     clearActivePlayback();
@@ -395,7 +249,6 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
       setMessages((current) => [...current, botMessage]);
       setPromptIds(intent.followUps);
 
-      // START AUDIO IMMEDIATELY with the answer
       speakReply(intent.reply, intent.id);
 
       typingIntervalRef.current = window.setInterval(() => {
@@ -415,20 +268,18 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
         if (nextIndex >= intent.reply.length) {
           window.clearInterval(typingIntervalRef.current);
           typingIntervalRef.current = null;
-          // Audio is already playing or finished
         }
       }, TYPING_SPEED_MS);
     }, TYPING_DELAY_MS);
   };
 
   const sendMessage = (text, isInternal = false) => {
-    const intent = resolveIntent(text);
+    const intent = resolvePortfolioIntent(text, knowledgeBase);
     if (!isInternal) {
       setMessages((current) => [...current, createMessage('user', text)]);
     }
     typeBotReply(intent);
   };
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -437,7 +288,6 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
     setDraft('');
     sendMessage(nextDraft);
   };
-
 
   return (
     <>
@@ -460,14 +310,13 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
             className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-gray-400 shadow-[0_0_10px_#a3a3a3]"
           />
         </div>
-
       </motion.button>
 
       {/* Main Chat Overlay */}
       <AnimatePresence>
         {isOpen && (
           <div className="fixed inset-0 z-[130] hidden items-center justify-center md:flex">
-            {/* Backdrop Blur */}
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: isClosing ? 0 : 1 }}
@@ -476,7 +325,6 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
               className="absolute inset-0 bg-black/40 backdrop-blur-md"
             />
 
-            {/* Full Screen Modal Container */}
             <motion.section
               initial={{ opacity: 0 }}
               animate={{ opacity: isClosing ? 0.4 : 1 }}
@@ -485,11 +333,8 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
             >
               {/* Left Column: Chat Interface (60%) */}
               <motion.div
-                animate={{
-                  x: isClosing ? -100 : 0,
-                  opacity: isClosing ? 0 : 1
-                }}
-                transition={{ duration: 0.5, ease: "easeIn" }}
+                animate={{ x: isClosing ? -100 : 0, opacity: isClosing ? 0 : 1 }}
+                transition={{ duration: 0.5, ease: 'easeIn' }}
                 className="relative flex h-full w-full flex-col border-r border-white/5 md:w-[60%] bg-black/60 backdrop-blur-3xl"
               >
                 {/* Header */}
@@ -521,8 +366,7 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
                       key={msg.id}
                       className="flex flex-col gap-4"
                     >
-                      <div className={`flex items-center gap-3 text-[10px] font-bold tracking-[0.25em] uppercase ${msg.role === 'user' ? 'justify-end text-white/40' : 'text-orange-300/60'
-                        }`}>
+                      <div className={`flex items-center gap-3 text-[10px] font-bold tracking-[0.25em] uppercase ${msg.role === 'user' ? 'justify-end text-white/40' : 'text-orange-300/60'}`}>
                         {msg.role === 'bot' && <Activity className="h-3 w-3 animate-pulse" />}
                         {msg.role === 'user' ? 'ACCESS_REQUEST' : 'CORE_INTERFACE'}
                       </div>
@@ -576,7 +420,7 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
                           key={id}
                           onClick={() => {
                             setMessages((current) => [...current, createMessage('user', entry.label, { isCommand: true })]);
-                            sendMessage(entry.id, true); // Send the ID as the command for exact matching
+                            sendMessage(entry.id, true);
                           }}
                           className="rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-[11px] font-medium tracking-wider text-white/50 transition-all hover:border-orange-500/30 hover:bg-orange-500/10 hover:text-orange-300"
                         >
@@ -614,40 +458,35 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
                 </div>
               </motion.div>
 
-              {/* Right Column: Speaking Character (40%) */}
-              <div className="relative hidden md:block w-[52%] h-full bg-black">
-                {/* Reactive Canvas Avatar Area */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <canvas
-                    ref={canvasRef}
-                    width={1600}
-                    height={1600}
-                    className="h-full w-full object-cover opacity-90 mix-blend-screen brightness-110 grayscale-[20%] transition-opacity duration-700"
-                    style={{ opacity: isReady ? 0.9 : 0 }}
-                  />
-                  {/* Digital Overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent" />
+              {/* Right Column: Female Avatar (40%) */}
+              <div className="relative hidden md:block w-[52%] h-full bg-black overflow-hidden">
+                {/* Avatar */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <FemaleAvatar isSpeaking={isBotSpeaking} isClosing={isClosing} />
+                </div>
 
-                  {/* Status Markers */}
-                  <div className="absolute right-12 top-12 flex flex-col items-end gap-3">
-                    <div className="flex items-center gap-4 rounded-full border border-white/10 bg-black/60 px-6 py-2.5 backdrop-blur-xl">
-                      <div className={`h-2.5 w-2.5 rounded-full ${isThinking || messages.some(m => m.isTyping) ? 'bg-orange-400 animate-pulse shadow-[0_0_15px_#fb923c]' : 'bg-white/20'}`} />
-                      <span className="text-[11px] font-bold tracking-[0.25em] text-white/90 uppercase">
-                        {isThinking || messages.some(m => m.isTyping) ? 'LINK_ACTIVE' : 'SYSTEM_IDLE'}
-                      </span>
-                    </div>
-                    <div className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em]">
-                      SYNC_LATENCY: {Math.floor(Math.random() * 5 + 5)}MS
-                    </div>
-                  </div>
+                {/* Gradient overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent pointer-events-none" />
 
-                  {/* Tech Specs Overlay */}
-                  <div className="absolute left-10 bottom-12 space-y-2 pointer-events-none">
-                    <div className="text-[9px] font-mono text-orange-300/40 uppercase tracking-widest">Digital Twin v2.4.0</div>
-                    <div className="h-0.5 w-12 bg-orange-500/20" />
-                    <div className="text-[9px] font-mono text-white/20 uppercase tracking-widest">Neural weights: Optimized</div>
+                {/* Status Markers */}
+                <div className="absolute right-12 top-12 flex flex-col items-end gap-3 pointer-events-none">
+                  <div className="flex items-center gap-4 rounded-full border border-white/10 bg-black/60 px-6 py-2.5 backdrop-blur-xl">
+                    <div className={`h-2.5 w-2.5 rounded-full ${isBotSpeaking ? 'bg-orange-400 animate-pulse shadow-[0_0_15px_#fb923c]' : 'bg-white/20'}`} />
+                    <span className="text-[11px] font-bold tracking-[0.25em] text-white/90 uppercase">
+                      {isBotSpeaking ? 'LINK_ACTIVE' : 'SYSTEM_IDLE'}
+                    </span>
                   </div>
+                  <div className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em]">
+                    DIGITAL_TWIN v2.4.0
+                  </div>
+                </div>
+
+                {/* Tech specs overlay */}
+                <div className="absolute left-10 bottom-12 space-y-2 pointer-events-none">
+                  <div className="text-[9px] font-mono text-orange-300/40 uppercase tracking-widest">Anne Perera — CS @ Kelaniya</div>
+                  <div className="h-0.5 w-12 bg-orange-500/20" />
+                  <div className="text-[9px] font-mono text-white/20 uppercase tracking-widest">AI • Full-Stack • Research</div>
                 </div>
 
                 {/* Decorative Grid */}

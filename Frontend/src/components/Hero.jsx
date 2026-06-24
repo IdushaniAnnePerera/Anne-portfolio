@@ -11,8 +11,9 @@ import { assetCache } from '../utils/assetLoader';
 // ─────────────────────────────────────────────────────────────
 export const AboutAvatar = ({ isVisible = false }) => {
   const canvasRef = useRef(null);
-  const frameRef = useRef(35); // start at index 35 = frame 36
+  const frameRef = useRef(35);
   const [isReady, setIsReady] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
 
   const draw = useCallback((index) => {
     const canvas = canvasRef.current;
@@ -22,7 +23,6 @@ export const AboutAvatar = ({ isVisible = false }) => {
     ctx.drawImage(assetCache.heroMove[index], 0, 0, canvas.width, canvas.height);
   }, []);
 
-  // Reactive check for assets
   useEffect(() => {
     const handleReady = () => {
       if (assetCache.isLoaded || assetCache.heroMove.length > 0) {
@@ -38,15 +38,32 @@ export const AboutAvatar = ({ isVisible = false }) => {
     };
   }, [draw]);
 
-  // Loop frames 36-50 (indices 35-49)
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || !photoError) return;
     const interval = setInterval(() => {
       frameRef.current = frameRef.current >= 49 ? 35 : frameRef.current + 1;
       draw(frameRef.current);
     }, 100);
     return () => clearInterval(interval);
-  }, [isReady, draw]);
+  }, [isReady, photoError, draw]);
+
+  if (!photoError) {
+    return (
+      <img
+        src={profile.image}
+        alt={profile.name}
+        onError={() => setPhotoError(true)}
+        className="w-full h-auto object-cover rounded-full transition-opacity duration-1000 ease-in-out"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          boxShadow: '0 0 60px rgba(251,146,60,0.25), 0 0 120px rgba(251,146,60,0.1)',
+          border: '2px solid rgba(251,146,60,0.35)',
+          WebkitMaskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
+          maskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
+        }}
+      />
+    );
+  }
 
   return (
     <canvas
@@ -72,10 +89,11 @@ export const AboutAvatar = ({ isVisible = false }) => {
 const HeroAvatar = ({ scrollYProgress }) => {
   const canvasRef = useRef(null);
   const wrapperRef = useRef(null);
-  const frameRef = useRef(0); // current hero loop frame index
+  const frameRef = useRef(0);
   const intervalRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
 
   const drawHero = useCallback((index) => {
     const canvas = canvasRef.current;
@@ -264,20 +282,35 @@ const HeroAvatar = ({ scrollYProgress }) => {
       }}
       className="relative w-full flex justify-center z-50"
     >
-      {!isReady && (
+      {!isReady && !photoError && (
         <div className="absolute inset-0 bg-neon-blue/10 animate-pulse blur-3xl rounded-full scale-50" />
       )}
-      <canvas
-        ref={canvasRef}
-        width={1200}
-        height={1200}
-        className="w-full max-w-[1600px] h-auto mix-blend-screen md:scale-150 pointer-events-none"
-        style={{
-          WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 75%)',
-          maskImage: 'radial-gradient(circle at center, black 40%, transparent 75%)',
-          filter: isReady ? 'contrast(1.15) brightness(1.05)' : 'contrast(1) brightness(0.5) grayscale(1)',
-        }}
-      />
+      {!photoError ? (
+        <img
+          src={profile.image}
+          alt={profile.name}
+          onError={() => setPhotoError(true)}
+          className="w-[340px] h-[340px] md:w-[460px] md:h-[460px] object-cover rounded-full pointer-events-none md:scale-150"
+          style={{
+            boxShadow: '0 0 80px rgba(251,146,60,0.3), 0 0 160px rgba(251,146,60,0.1)',
+            border: '2px solid rgba(251,146,60,0.4)',
+            WebkitMaskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
+            maskImage: 'radial-gradient(circle at center, black 55%, transparent 85%)',
+          }}
+        />
+      ) : (
+        <canvas
+          ref={canvasRef}
+          width={1200}
+          height={1200}
+          className="w-full max-w-[1600px] h-auto mix-blend-screen md:scale-150 pointer-events-none"
+          style={{
+            WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 75%)',
+            maskImage: 'radial-gradient(circle at center, black 40%, transparent 75%)',
+            filter: isReady ? 'contrast(1.15) brightness(1.05)' : 'contrast(1) brightness(0.5) grayscale(1)',
+          }}
+        />
+      )}
     </Motion.div>
   );
 };

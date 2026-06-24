@@ -43,13 +43,13 @@ const AUDIO_FILES = [
   'clear',
   'fallback',
   // Project-specific audio (IDs from portfolio.js)
-  'project-pdf-csv-pipeline',
-  'project-collabnest',
-  'project-ai-fir',
-  'project-resume-roaster',
-  'project-self-driving-car',
-  'project-chat-app',
-  'project-resqterra',
+  'project-slr-gat',
+  'project-super-resolution',
+  'project-credit-ai',
+  'project-citation-verifier',
+  'project-agrilinker',
+  'project-vital',
+  'project-local-rag',
 ];
 
 /**
