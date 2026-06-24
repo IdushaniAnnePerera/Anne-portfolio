@@ -7,6 +7,7 @@ import About from './components/About';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
+import Certifications from './components/Certifications';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CustomCursor from './components/ui/CustomCursor';
@@ -94,9 +95,10 @@ function App() {
               <main>
                 <Hero />
                 <About />
-                <Experience />
                 <Projects />
+                <Experience />
                 <Skills />
+                <Certifications />
                 <Contact />
               </main>
 

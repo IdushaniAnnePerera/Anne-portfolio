@@ -11,10 +11,8 @@ import {
   GraduationCap,
   Activity,
   Trophy,
-  Star,
   Github,
   Linkedin,
-  BookOpen,
 } from 'lucide-react';
 import { profile, education, awards } from '../data/portfolio';
 import { Section } from './ui/Section';
@@ -110,7 +108,7 @@ const About = () => {
           </div>
 
           {/* ── Bio Dossier ── */}
-          <SpotlightCard className="md:col-span-12 lg:col-span-9 p-0 lg:order-none" delay={0.1}>
+          <SpotlightCard className="md:col-span-12 lg:col-span-9 p-0" delay={0.1}>
             <div className="h-8 border-b border-white/5 bg-white/5 px-4 flex items-center justify-between">
               <div className="flex gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-orange-500/40" />
@@ -119,32 +117,24 @@ const About = () => {
               </div>
               <span className="text-[8px] font-mono text-white/20 tracking-widest uppercase font-bold">about.md</span>
             </div>
-
             <div className="p-6">
               <div className="flex items-start gap-4 mb-4">
                 <div className="p-2 rounded-lg bg-neon-blue/5 border border-neon-blue/10">
                   <Terminal className="w-5 h-5 text-neon-blue drop-shadow-[0_0_5px_rgba(0,243,255,0.3)]" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-black text-white uppercase tracking-tight leading-none mb-1">
-                    About Me
-                  </h4>
+                  <h4 className="text-lg font-black text-white uppercase tracking-tight leading-none mb-1">About Me</h4>
                   <p className="text-[9px] font-bold font-mono text-neon-blue/50 uppercase leading-none">
                     {profile.role.split('|')[0].trim()}
                   </p>
                 </div>
               </div>
-
               <p className="text-gray-300 leading-relaxed text-sm md:text-base mb-6 font-normal max-w-4xl tracking-tight">
                 {profile.summary}
               </p>
-
               <div className="flex flex-wrap gap-2">
                 {['AI / ML Research', 'Full-Stack Development', 'Research', 'Mobile Apps', 'Data Engineering'].map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-gray-400 font-mono uppercase hover:text-white hover:border-neon-blue/30 transition-all cursor-default"
-                  >
+                  <span key={tag} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-gray-400 font-mono uppercase hover:text-white hover:border-neon-blue/30 transition-all cursor-default">
                     {tag}
                   </span>
                 ))}
@@ -153,37 +143,22 @@ const About = () => {
           </SpotlightCard>
 
           {/* ── Profile / Photo Card (spans 2 rows) ── */}
-          <SpotlightCard
-            className="md:col-span-12 lg:col-span-3 lg:row-span-2 min-h-[340px] lg:min-h-full order-first lg:order-none"
-          >
-            <div
-              ref={profileCardRef}
-              data-avatar-target="profile-card"
-              className="relative h-full w-full flex flex-col"
-            >
+          <SpotlightCard className="md:col-span-12 lg:col-span-3 lg:row-span-2 min-h-[340px] lg:min-h-full order-first lg:order-none">
+            <div ref={profileCardRef} data-avatar-target="profile-card" className="relative h-full w-full flex flex-col">
               <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
                 <Motion.div style={{ opacity: aboutAvatarOpacity }}>
                   <AboutAvatar isVisible={true} />
                 </Motion.div>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent" />
               </div>
-
               <div className="mt-auto p-5 relative z-20">
                 <div className="flex justify-center gap-3">
-                  <a
-                    href={profile.social.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-all"
-                  >
+                  <a href={profile.social.github} target="_blank" rel="noopener noreferrer"
+                     className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-all">
                     <Github className="w-4 h-4" />
                   </a>
-                  <a
-                    href={profile.social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-neon-blue hover:border-neon-blue/30 transition-all"
-                  >
+                  <a href={profile.social.linkedin} target="_blank" rel="noopener noreferrer"
+                     className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-neon-blue hover:border-neon-blue/30 transition-all">
                     <Linkedin className="w-4 h-4" />
                   </a>
                 </div>
@@ -200,43 +175,29 @@ const About = () => {
               <h4 className="text-lg font-black text-white uppercase tracking-tighter">Education</h4>
             </div>
 
-            <div className="flex-1 relative pl-5 border-l-2 border-orange-500/30">
-              <div className="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.6)]" />
-
-              <h5 className="text-base md:text-lg font-black text-white leading-tight">
-                {education.degree}
-              </h5>
-              <p className="text-sm text-gray-400 font-medium mt-0.5">{education.institution}</p>
-
-              <div className="flex flex-wrap gap-2 mt-3">
-                <span className="px-2.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-[10px] font-mono font-bold text-orange-400 uppercase tracking-wider">
-                  {education.period}
-                </span>
-                <span className="px-2.5 py-1 rounded-full bg-neon-blue/10 border border-neon-blue/30 text-[10px] font-mono font-bold text-neon-blue uppercase tracking-wider">
-                  GPA: {education.gpa}
-                </span>
-              </div>
-
-              <div className="mt-5">
-                <div className="flex items-center gap-1.5 mb-2">
-                  <BookOpen className="w-3 h-3 text-gray-500" />
-                  <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest">Coursework</span>
+            <div className="flex-1 relative pl-5 border-l-2 border-orange-500/20 space-y-6">
+              {education.map((entry, i) => (
+                <div key={entry.id} className="relative">
+                  {/* Timeline dot */}
+                  <div
+                    className="absolute -left-[25px] top-1 w-2.5 h-2.5 rounded-full"
+                    style={{
+                      background: entry.current ? '#f97316' : 'rgba(249,115,22,0.3)',
+                      border: entry.current ? 'none' : '1px solid rgba(249,115,22,0.4)',
+                      boxShadow: entry.current ? '0 0 10px rgba(249,115,22,0.6)' : 'none',
+                    }}
+                  />
+                  <h5 className="text-sm md:text-base font-black text-white leading-tight">{entry.degree}</h5>
+                  <p className="text-xs text-gray-400 mt-0.5">{entry.institution}</p>
+                  <span className="inline-block mt-2 px-2.5 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/25 text-[10px] font-mono font-bold text-orange-400 uppercase tracking-wider">
+                    {entry.period}
+                  </span>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {education.coursework.map((course) => (
-                    <span
-                      key={course}
-                      className="px-2 py-0.5 rounded-md bg-white/5 border border-white/8 text-[10px] text-gray-500 font-medium hover:text-gray-300 hover:border-white/20 transition-all cursor-default"
-                    >
-                      {course}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </SpotlightCard>
 
-          {/* ── Awards & Achievements Card ── */}
+          {/* ── Achievements Card ── */}
           <SpotlightCard className="md:col-span-12 lg:col-span-4 p-6" delay={0.3} neoColor="purple">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-neon-purple/10 border border-neon-purple/20">
@@ -245,21 +206,20 @@ const About = () => {
               <h4 className="text-lg font-black text-white uppercase tracking-tighter">Achievements</h4>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               {awards.map((award) => (
-                <div key={award.id} className="flex items-start gap-3 group/award">
-                  <div className="w-7 h-7 rounded-full bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover/award:bg-neon-purple/20 transition-colors">
-                    <Star className="w-3 h-3 text-neon-purple" />
-                  </div>
-                  <div>
-                    <h6 className="text-sm font-bold text-white leading-tight group-hover/award:text-neon-purple/90 transition-colors">
-                      {award.title}
-                    </h6>
-                    <p className="text-[10px] text-gray-500 mt-0.5 font-mono leading-relaxed">
-                      {award.org}
-                      <span className="text-neon-purple/40 mx-1">·</span>
-                      {award.year}
-                    </p>
+                <div key={award.id} className="group/award">
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-neon-purple mt-2 flex-shrink-0 shadow-[0_0_8px_rgba(188,19,254,0.6)]" />
+                    <div>
+                      <h6 className="text-sm font-black text-white leading-tight group-hover/award:text-neon-purple/90 transition-colors">
+                        {award.title}
+                      </h6>
+                      {award.org && (
+                        <p className="text-[10px] font-mono text-neon-purple/50 mt-1 uppercase tracking-wider">{award.org}</p>
+                      )}
+                      <p className="text-xs text-gray-400 mt-2 leading-relaxed">{award.description}</p>
+                    </div>
                   </div>
                 </div>
               ))}

@@ -51,25 +51,25 @@ export const skills = {
     icon: Code,
     items: ["Java", "Python", "C/C++/C#", "SQL", "PL/SQL", "TypeScript", "JavaScript", "HTML/CSS/PHP", "Prolog"]
   },
-  "Frontend": {
+  "Frontend Development": {
     icon: Layout,
-    items: ["React.js", "Next.js", "React Native", "Flutter", "Tailwind CSS", "Bootstrap"]
+    items: ["React.js", "Next.js", "React Native", "Tailwind CSS", "Bootstrap"]
   },
-  "Backend": {
+  "Backend Development": {
     icon: Server,
     items: ["Spring Boot", "Node.js", "Express.js", "FastAPI", "Flask", "REST APIs"]
   },
-  "Databases": {
+  "Database Technologies": {
     icon: Database,
-    items: ["MySQL", "MongoDB", "SQL Server", "Oracle", "SQLite", "FAISS"]
+    items: ["MySQL", "MongoDB", "SQL Server", "Oracle", "SQLite"]
   },
-  "AI & Data Science": {
+  "AI and Data Science": {
     icon: Cpu,
-    items: ["PyTorch", "LangChain", "NLP", "Sentiment Analysis", "Machine Learning", "GNNs", "TensorRT", "ONNX"]
+    items: ["PyTorch", "LangChain", "Natural Language Processing (NLP)", "Sentiment Analysis", "Machine Learning"]
   },
-  "Cloud & DevOps": {
+  "Cloud and DevOps": {
     icon: Cloud,
-    items: ["AWS", "Docker", "Vercel", "Firebase", "CI/CD"]
+    items: ["AWS", "Docker", "Vercel"]
   }
 };
 
@@ -219,41 +219,36 @@ export const projects = [
   },
 ];
 
-export const education = {
-  degree: "BSc (Hons) in Computer Science",
-  institution: "University of Kelaniya, Sri Lanka",
-  period: "2023 – Present",
-  gpa: "8.0 / 10.0",
-  coursework: ["Data Structures", "Algorithms", "Machine Learning", "Database Systems", "Software Engineering", "Computer Networks"]
-};
+export const education = [
+  {
+    id: "bsc",
+    degree: "BSc (Hons) in Computer Science",
+    institution: "University of Kelaniya, Sri Lanka",
+    period: "2023 – Present",
+    current: true,
+  },
+  {
+    id: "al",
+    degree: "G.C.E. Advanced Level",
+    institution: "Your School Name, Sri Lanka",
+    period: "Your Year",
+    current: false,
+  },
+  {
+    id: "ol",
+    degree: "G.C.E. Ordinary Level",
+    institution: "Your School Name, Sri Lanka",
+    period: "Your Year",
+    current: false,
+  },
+];
 
 export const awards = [
   {
-    id: "aws-head",
-    title: "Head of Events & Logistics",
-    org: "AWS Student Community Day — Sri Lanka",
-    year: "2026",
-    description: "Led end-to-end planning and logistics for a national-scale AWS tech community event."
+    id: "scholarship",
+    title: "All Island Rank 6 – Grade 5 Scholarship Examination",
+    org: "Ministry of Education, Sri Lanka",
+    year: "",
+    description: "Secured 6th place at the All Island level and 3rd place in Gampaha District in the highly competitive National Grade 5 Scholarship Examination.",
   },
-  {
-    id: "installation-editor",
-    title: "Editor, Organizing Committee",
-    org: "14th Installation Ceremony, University of Kelaniya",
-    year: "2023 – 2024",
-    description: "Managed editorial content and communications for the annual university installation ceremony."
-  },
-  {
-    id: "open-day-org",
-    title: "Organizing Committee Member",
-    org: "Open Day 2025, Faculty of Science, UoK",
-    year: "2025",
-    description: "Coordinated logistics and visitor experience for the faculty-wide open event."
-  },
-  {
-    id: "rotaract",
-    title: "Member",
-    org: "Rotaract Club of University of Kelaniya",
-    year: "2023 – Present",
-    description: "Active participation in community service and leadership development initiatives."
-  }
 ];

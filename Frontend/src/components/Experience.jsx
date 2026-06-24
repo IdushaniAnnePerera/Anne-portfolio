@@ -78,7 +78,7 @@ const Experience = () => {
                <div className="absolute top-1/2 left-8 md:left-24 -translate-y-1/2">
                   <h3 className="text-3xl md:text-5xl font-bold text-white">
                      <span className="text-orange-300 mr-4">{">>>"}</span>
-                     Carrier Trajectory
+                     Extra Curricular Activities
                   </h3>
                </div>
             </motion.div>
@@ -101,15 +101,6 @@ const Experience = () => {
                   </div>
                ))}
 
-               {/* Future Node */}
-               <div className="w-[400px] flex-shrink-0 flex items-center justify-center p-12 border border-dashed border-white/20 rounded-2xl bg-white/5 mx-12">
-                  <div className="text-center">
-                     <div className="inline-block px-4 py-2 border border-neon-blue text-neon-blue font-mono mb-4 animate-pulse">
-                        LOADING_NEXT_CHAPTER...
-                     </div>
-                     <p className="text-gray-400 text-sm">Open for Senior Roles & Leadership Opportunities</p>
-                  </div>
-               </div>
 
             </motion.div>
          </div>
