@@ -129,7 +129,7 @@ export const projects = [
     links: {
       github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/slr-gat.png"
+    image: "/assets/GAT.png"
   },
   {
     id: "super-resolution",
@@ -158,7 +158,7 @@ export const projects = [
     links: {
       github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/credit-ai.png"
+    image: "/assets/credit ai.png"
   },
   {
     id: "citation-verifier",
@@ -187,7 +187,7 @@ export const projects = [
     links: {
       github: "https://github.com/IdushaniAnnePerera"
     },
-    image: "/assets/agrilinker.png"
+    image: "/assets/agri.jpg"
   },
   {
     id: "vital",

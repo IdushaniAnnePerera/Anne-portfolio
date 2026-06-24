@@ -5,6 +5,50 @@ import { profile } from '../data/portfolio';
 import { useCursor } from '../context/CursorContext.jsx';
 
 // ─────────────────────────────────────────────────────────────
+// Floating tech-stack icons strip
+// ─────────────────────────────────────────────────────────────
+const TECH_STACK = [
+  { label: 'Spring Boot', img: '/assets/spring-logo.png' },
+  { label: 'Docker',      img: '/assets/docker_icon-removebg-preview.png' },
+  { label: 'Linux',       img: '/assets/linux-logo-removebg-preview.png' },
+  { label: 'React',       dot: '#61DAFB' },
+  { label: 'Python',      dot: '#3776AB' },
+  { label: 'PyTorch',     dot: '#EE4C2C' },
+  { label: 'AWS',         dot: '#FF9900' },
+  { label: 'Java',        dot: '#ED8B00' },
+  { label: 'TypeScript',  dot: '#3178C6' },
+  { label: 'MongoDB',     dot: '#47A248' },
+];
+
+const FloatingIcons = () => (
+  <div className="mt-8 md:mt-10">
+    <p className="text-[9px] font-mono font-bold text-white/20 uppercase tracking-[0.3em] mb-3">Tech Stack</p>
+    <div className="flex flex-wrap gap-2">
+      {TECH_STACK.map((tech, i) => (
+        <Motion.div
+          key={tech.label}
+          animate={{ y: [0, -(4 + (i % 3) * 2), 0] }}
+          transition={{
+            duration: 2.4 + i * 0.22,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: i * 0.12,
+          }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/8 hover:border-orange-400/30 hover:bg-orange-400/5 transition-colors cursor-default"
+        >
+          {tech.img ? (
+            <img src={tech.img} alt={tech.label} className="w-3.5 h-3.5 object-contain" />
+          ) : (
+            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: tech.dot }} />
+          )}
+          <span className="text-[10px] font-mono font-semibold text-gray-400">{tech.label}</span>
+        </Motion.div>
+      ))}
+    </div>
+  </div>
+);
+
+// ─────────────────────────────────────────────────────────────
 // AboutAvatar — floating photo used in the About section
 // ─────────────────────────────────────────────────────────────
 export const AboutAvatar = ({ isVisible = false }) => (
@@ -180,6 +224,8 @@ const Hero = () => {
                   <div className="h-px w-8 bg-gray-800 transition-all group-hover:bg-neon-purple group-hover:w-12" />
                 </a>
               </div>
+
+              <FloatingIcons />
             </Motion.div>
           </div>
 
