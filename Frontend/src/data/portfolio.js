@@ -42,7 +42,8 @@ export const profile = {
     github: "https://github.com/IdushaniAnnePerera",
     linkedin: "https://www.linkedin.com/in/anne-perera-b62171359",
   },
-  image: "/assets/anne.jpg"
+  image: "/assets/anne.jpg",
+  cv: "/assets/anne-cv.pdf"
 };
 
 export const skills = {
@@ -222,6 +223,37 @@ export const education = {
   degree: "BSc (Hons) in Computer Science",
   institution: "University of Kelaniya, Sri Lanka",
   period: "2023 – Present",
-  cgpa: null,
-  coursework: "Data Structures, Algorithms, Machine Learning, Database Systems, Software Engineering"
+  gpa: "8.0 / 10.0",
+  coursework: ["Data Structures", "Algorithms", "Machine Learning", "Database Systems", "Software Engineering", "Computer Networks"]
 };
+
+export const awards = [
+  {
+    id: "aws-head",
+    title: "Head of Events & Logistics",
+    org: "AWS Student Community Day — Sri Lanka",
+    year: "2026",
+    description: "Led end-to-end planning and logistics for a national-scale AWS tech community event."
+  },
+  {
+    id: "installation-editor",
+    title: "Editor, Organizing Committee",
+    org: "14th Installation Ceremony, University of Kelaniya",
+    year: "2023 – 2024",
+    description: "Managed editorial content and communications for the annual university installation ceremony."
+  },
+  {
+    id: "open-day-org",
+    title: "Organizing Committee Member",
+    org: "Open Day 2025, Faculty of Science, UoK",
+    year: "2025",
+    description: "Coordinated logistics and visitor experience for the faculty-wide open event."
+  },
+  {
+    id: "rotaract",
+    title: "Member",
+    org: "Rotaract Club of University of Kelaniya",
+    year: "2023 – Present",
+    description: "Active participation in community service and leadership development initiatives."
+  }
+];

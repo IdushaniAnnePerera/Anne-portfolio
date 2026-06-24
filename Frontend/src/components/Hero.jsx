@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion as Motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ArrowRight, Github, Linkedin, Mail, Sparkles, Terminal, Shield } from 'lucide-react';
+import { ArrowRight, Download } from 'lucide-react';
 import { profile } from '../data/portfolio';
 import { useCursor } from '../context/CursorContext.jsx';
 
@@ -128,37 +128,56 @@ const Hero = () => {
               onMouseEnter={() => setCursorType('text')}
               onMouseLeave={() => setCursorType('default')}
             >
-              <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black text-white leading-[1.05] tracking-tighter mb-4 md:mb-8 cursor-default">
-                Design. Code. <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-white to-neon-purple">
-                  Engineering.
-                </span>
-              </h1>
+              {/* Name */}
+              <div className="mb-4 md:mb-6">
+                <p className="text-[10px] font-mono font-bold tracking-[0.35em] text-neon-blue/70 uppercase mb-3">
+                  {profile.hero.eyebrow}
+                </p>
+                <h1 className="text-6xl sm:text-7xl lg:text-[96px] font-black text-white leading-[1.0] tracking-tighter cursor-default">
+                  Anne{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-white to-neon-purple">
+                    Perera
+                  </span>
+                </h1>
+                <p className="mt-2 text-xs md:text-sm font-mono font-bold text-orange-400/70 tracking-[0.18em] uppercase">
+                  AI &amp; Full-Stack Developer
+                </p>
+              </div>
 
-              <p className="text-md md:text-xl text-gray-400 font-light leading-relaxed max-w-xl mb-6 md:mb-12">
+              <p className="text-sm md:text-lg text-gray-400 font-light leading-relaxed max-w-xl mb-6 md:mb-10">
                 {profile.hero.summary}
               </p>
 
               {/* Action Area */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8">
+              <div className="flex flex-wrap items-center gap-3 md:gap-5">
                 <Motion.a
                   href={profile.hero.primaryCta.href}
                   style={{ x: xSpring, y: ySpring }}
                   onMouseMove={handleMagnetic}
                   onMouseLeave={resetMagnetic}
-                  className="relative group px-4 py-2 md:px-10 md:py-5 bg-white text-black rounded-full overflow-hidden transition-all duration-300 transform active:scale-95 flex items-center gap-3"
+                  className="relative group px-5 py-2.5 md:px-9 md:py-4 bg-white text-black rounded-full overflow-hidden transition-all duration-300 transform active:scale-95 flex items-center gap-3"
                 >
                   <span className="relative z-10 font-bold uppercase tracking-widest text-[10px] md:text-xs">View My Work</span>
-                  <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   <div className="absolute inset-0 bg-neon-blue translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </Motion.a>
+
+                <a
+                  href={profile.cv}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-5 py-2.5 md:px-8 md:py-4 border border-white/20 text-white/70 hover:text-white hover:border-orange-400/50 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  View CV
+                </a>
 
                 <a
                   href={profile.hero.secondaryCta.href}
                   className="text-gray-400 hover:text-white font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase transition-all flex items-center gap-3 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform inline-block">Contact Me</span>
-                  <div className="h-px w-8 bg-gray-800 transition-all group-hover:bg-neon-purple group-hover:w-12 ml-2" />
+                  <span className="group-hover:translate-x-1 transition-transform inline-block">Contact</span>
+                  <div className="h-px w-8 bg-gray-800 transition-all group-hover:bg-neon-purple group-hover:w-12" />
                 </a>
               </div>
             </Motion.div>
