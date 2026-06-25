@@ -97,6 +97,11 @@ export const experiences = [
     description: [
       "Served as Editor on the Organizing Committee for the 14th Installation Ceremony of the University of Kelaniya.",
       "Managed editorial content and event communications."
+    ],
+    images: [
+      { src: '/assets/editor.jpeg',   alt: 'Editor Role' },
+      { src: '/assets/groupoc.jpeg',  alt: 'Organizing Committee' },
+      { src: '/assets/editoroc.jpeg', alt: 'Editor OC' },
     ]
   },
   {
@@ -107,6 +112,12 @@ export const experiences = [
     description: [
       "Organized and coordinated the Faculty of Science Open Day, showcasing research and student projects.",
       "Managed logistics and visitor experience for faculty-wide open event."
+    ],
+    images: [
+      { src: '/assets/open.jpeg', alt: 'Open Day' },
+      { src: '/assets/game.jpeg', alt: 'Game Activity' },
+      { src: '/assets/ex.jpeg',   alt: 'Exhibition' },
+      { src: '/assets/card.jpeg', alt: 'Event Card' },
     ]
   },
   {

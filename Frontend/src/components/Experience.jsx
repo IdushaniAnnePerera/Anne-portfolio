@@ -95,7 +95,7 @@ const Experience = () => {
                <div className="absolute top-1/2 left-8 md:left-24 -translate-y-1/2">
                   <h3 className="text-3xl md:text-5xl font-bold text-white">
                      <span className="text-orange-300 mr-4">{">>>"}</span>
-                     Extra Curricular Activities
+                     Experience
                   </h3>
                </div>
             </motion.div>
