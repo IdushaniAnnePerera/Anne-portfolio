@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion as Motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Download, Github, Linkedin } from 'lucide-react';
+import GitHubCalendar from 'react-github-calendar';
 import { profile } from '../data/portfolio';
 import { useCursor } from '../context/CursorContext.jsx';
 
@@ -105,6 +106,20 @@ const Hero = () => {
   const xSpring = useSpring(0, { stiffness: 150, damping: 20 });
   const ySpring = useSpring(0, { stiffness: 150, damping: 20 });
 
+  const [ghStats, setGhStats] = useState({ repos: null, stars: null });
+  useEffect(() => {
+    const username = 'IdushaniAnnePerera';
+    Promise.all([
+      fetch(`https://api.github.com/users/${username}`).then(r => r.json()),
+      fetch(`https://api.github.com/users/${username}/repos?per_page=100`).then(r => r.json()),
+    ]).then(([user, repos]) => {
+      const stars = Array.isArray(repos)
+        ? repos.reduce((s, r) => s + (r.stargazers_count || 0), 0)
+        : 0;
+      setGhStats({ repos: user.public_repos ?? 0, stars });
+    }).catch(() => {});
+  }, []);
+
   const handleMagnetic = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     xSpring.set((e.clientX - rect.left - rect.width / 2) * 0.35);
@@ -190,6 +205,27 @@ const Hero = () => {
                   <span className="group-hover:translate-x-1 transition-transform inline-block">Contact</span>
                   <div className="h-px w-8 bg-gray-800 transition-all group-hover:bg-neon-purple group-hover:w-12" />
                 </a>
+
+                <div className="flex items-center gap-2 ml-1">
+                  <a
+                    href={profile.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg border border-white/10 text-white/40 hover:text-neon-blue hover:border-neon-blue/40 transition-all"
+                    title="LinkedIn"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                  </a>
+                  <a
+                    href={profile.social.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-all"
+                    title="GitHub"
+                  >
+                    <Github className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
 
               {/* Floating tech icons — horizontal row below CTAs */}
@@ -228,6 +264,60 @@ const Hero = () => {
           </div>
 
         </div>
+
+        {/* GitHub Contributions Calendar */}
+        <Motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.7, ease: 'easeOut' }}
+          className="mt-16 pt-10 border-t border-white/8"
+        >
+          <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold">
+              GitHub Contributions
+            </p>
+            <a
+              href={profile.social.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-mono text-[10px] text-white/30 hover:text-white transition-colors"
+            >
+              <Github className="w-3 h-3" />
+              IdushaniAnnePerera
+            </a>
+          </div>
+
+          <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+            <div className="overflow-x-auto flex-1 min-w-0">
+              <GitHubCalendar
+                username="IdushaniAnnePerera"
+                colorScheme="dark"
+                theme={{ dark: ['#0d1117', '#0f3460', '#1a6b9a', '#00b4d8', '#00f3ff'] }}
+                fontSize={11}
+                blockSize={11}
+                blockMargin={3}
+                labels={{ totalCount: '{{count}} contributions in the last year' }}
+              />
+            </div>
+
+            <div className="flex lg:flex-col gap-8 lg:gap-6 lg:pl-10 lg:border-l border-white/8 flex-shrink-0">
+              {[
+                { label: 'Public Repos', value: ghStats.repos },
+                { label: 'Total Stars',  value: ghStats.stars  },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex flex-col gap-0.5">
+                  <span className="font-mono text-3xl font-bold text-white tabular-nums">
+                    {value === null ? (
+                      <span className="inline-block w-8 h-6 rounded bg-white/10 animate-pulse" />
+                    ) : value}
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/30">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Motion.div>
+
       </div>
 
       {/* Scroll indicator */}

@@ -172,7 +172,7 @@ export const projects = [
       "Built a modular FastAPI backend with Docker deployment, designed for scalable expansion with FinBERT and LSTM integration."
     ],
     links: {
-      github: "https://github.com/IdushaniAnnePerera"
+      github: "https://github.com/IdushaniAnnePerera/CreditAI-Enterprise-Risk-Intelligence-Platform"
     },
     image: "/assets/credit ai.png"
   },

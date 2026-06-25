@@ -132,19 +132,42 @@ const Projects = () => {
           </h2>
        </div>
 
-      <div className="pb-[40vh] px-4 md:px-10 lg:px-20">
+      <div className="pb-[20vh] px-4 md:px-10 lg:px-20">
         {projects.map((project, i) => {
           const targetScale = 1 - ((projects.length - i) * 0.04);
           return (
-            <ProjectCard 
-              key={project.id} 
-              project={project} 
-              index={i} 
-              targetScale={targetScale} 
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={i}
+              targetScale={targetScale}
             />
           );
         })}
       </div>
+
+      {/* Explore on GitHub */}
+      <Motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col items-center gap-5 py-20 border-t border-white/5"
+      >
+        <p className="text-gray-500 font-mono text-sm tracking-widest">
+          there&apos;s more where that came from
+        </p>
+        <a
+          href="https://github.com/IdushaniAnnePerera"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/40 font-mono text-xs uppercase tracking-widest transition-all group"
+        >
+          <Github className="w-4 h-4" />
+          Explore the rest on GitHub
+          <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        </a>
+      </Motion.div>
     </div>
   );
 };
