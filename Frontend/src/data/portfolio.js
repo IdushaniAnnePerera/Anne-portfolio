@@ -43,7 +43,7 @@ export const profile = {
     linkedin: "https://www.linkedin.com/in/anne-perera-b62171359",
   },
   image: "/assets/anne.jpg",
-  cv: "/assets/anne-cv.pdf"
+  cv: "/assets/HIA.Perera_CV.pdf"
 };
 
 export const skills = {
