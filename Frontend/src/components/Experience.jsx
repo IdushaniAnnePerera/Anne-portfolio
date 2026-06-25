@@ -43,6 +43,23 @@ const ExperienceCard = ({ exp, index }) => {
                   </li>
                ))}
             </ul>
+
+            {exp.images && exp.images.length > 0 && (
+               <div className="mt-6 pt-5 border-t border-white/10">
+                  <p className="text-[9px] font-mono font-bold text-white/25 uppercase tracking-[0.3em] mb-3">Gallery</p>
+                  <div className="flex gap-3">
+                     {exp.images.map((img) => (
+                        <div key={img.src} className="flex-1 overflow-hidden rounded-lg border border-white/10 group/img">
+                           <img
+                              src={img.src}
+                              alt={img.alt}
+                              className="w-full h-24 object-cover opacity-75 group-hover/img:opacity-100 group-hover/img:scale-105 transition-all duration-400"
+                           />
+                        </div>
+                     ))}
+                  </div>
+               </div>
+            )}
          </div>
       </div>
    );

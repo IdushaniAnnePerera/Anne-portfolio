@@ -82,6 +82,11 @@ export const experiences = [
     description: [
       "Led event planning and logistics for the AWS Student Community Day Sri Lanka 2026.",
       "Coordinated venue, speakers, and attendee management for a large-scale tech community event."
+    ],
+    images: [
+      { src: '/assets/ocscd.jpg',  alt: 'OCSCD Event' },
+      { src: '/assets/aws.jpg',    alt: 'AWS Community Day' },
+      { src: '/assets/group.jpg',  alt: 'Team Photo' },
     ]
   },
   {
