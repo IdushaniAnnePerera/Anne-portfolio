@@ -176,7 +176,7 @@ const About = () => {
             </div>
 
             <div className="flex-1 relative pl-5 border-l-2 border-orange-500/20 space-y-6">
-              {education.map((entry, i) => (
+              {education.map((entry) => (
                 <div key={entry.id} className="relative">
                   {/* Timeline dot */}
                   <div

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion as Motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, Download, Github, Linkedin } from 'lucide-react';
-import GitHubCalendar from 'react-github-calendar';
+import { GitHubCalendar } from 'react-github-calendar';
 import { profile } from '../data/portfolio';
 import { useCursor } from '../context/CursorContext.jsx';
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   SendHorizontal,
@@ -46,7 +46,7 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
   const thinkingTimeoutRef = useRef(null);
   const scrollRef = useRef(null);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (typingIntervalRef.current) window.clearInterval(typingIntervalRef.current);
     if (thinkingTimeoutRef.current) window.clearTimeout(thinkingTimeoutRef.current);
     setMessages([welcomeMessage]);
@@ -54,7 +54,7 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
     setIsThinking(false);
     setDraft('');
     onOpenChange(false);
-  };
+  }, [welcomeMessage, knowledgeBase.defaultPromptIds, onOpenChange]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -71,7 +71,7 @@ export default function PortfolioChatbot({ isOpen, onOpenChange }) {
     const onKeyDown = (e) => { if (e.key === 'Escape') handleClose(); };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isOpen]);
+  }, [isOpen, handleClose]);
 
   useEffect(() => {
     return () => {
