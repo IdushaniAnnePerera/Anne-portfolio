@@ -326,7 +326,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
-        className="hidden absolute md:bottom-4 left-1/2 -translate-x-1/2 md:flex flex-col items-center gap-3 text-gray-500 hover:text-white transition-colors"
+        className="hidden absolute md:bottom-[-3rem] left-1/2 -translate-x-1/2 md:flex flex-col items-center gap-3 text-gray-500 hover:text-white transition-colors"
       >
         <span className="text-[10px] uppercase font-mono tracking-[0.4em] vertical-text">Explore</span>
         <div className="w-[1px] h-16 bg-gradient-to-b from-gray-700 to-transparent relative">
