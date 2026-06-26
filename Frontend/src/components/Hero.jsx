@@ -228,8 +228,8 @@ const Hero = () => {
                 </div>
               </div>
 
-              {/* Floating tech icons — horizontal row below CTAs */}
-              <div className="flex items-end gap-5 md:gap-7 mt-10">
+              {/* Floating tech icons — horizontal row below CTAs, hidden on mobile */}
+              <div className="hidden sm:flex items-end gap-5 md:gap-7 mt-10">
                 {TECH_ICONS.map((icon) => (
                   <Motion.div
                     key={icon.alt}
@@ -252,7 +252,7 @@ const Hero = () => {
           </div>
 
           {/* Right Visual Column */}
-          <div className="lg:col-span-5 relative -mt-20 md:mt-0">
+          <div className="lg:col-span-5 relative mt-0 lg:-mt-20 order-first lg:order-none">
             <Motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
