@@ -292,7 +292,7 @@ const Hero = () => {
               <GitHubCalendar
                 username="IdushaniAnnePerera"
                 colorScheme="dark"
-                theme={{ dark: ['#0d1117', '#0f3460', '#1a6b9a', '#00b4d8', '#00f3ff'] }}
+                theme={{ dark: ['#0d1117', '#0a2e1a', '#1a6b32', '#26a641', '#39d353'] }}
                 fontSize={11}
                 blockSize={11}
                 blockMargin={3}
@@ -326,7 +326,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
-        className="hidden absolute md:bottom-12 left-1/2 -translate-x-1/2 md:flex flex-col items-center gap-3 text-gray-500 hover:text-white transition-colors"
+        className="hidden absolute md:bottom-4 left-1/2 -translate-x-1/2 md:flex flex-col items-center gap-3 text-gray-500 hover:text-white transition-colors"
       >
         <span className="text-[10px] uppercase font-mono tracking-[0.4em] vertical-text">Explore</span>
         <div className="w-[1px] h-16 bg-gradient-to-b from-gray-700 to-transparent relative">
