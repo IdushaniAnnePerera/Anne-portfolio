@@ -82,7 +82,7 @@ const Skills = () => {
   }, []);
 
   return (
-    <section id="skills" className="min-h-screen flex flex-col items-center justify-center relative z-10 py-20 ml-8 md:ml-0">
+    <section id="skills" className="min-h-screen flex flex-col items-center justify-center relative z-10 py-20">
       <div className="flex flex-col items-center mb-12">
         <h2 className="text-4xl md:text-6xl font-bold mb-6 text-center">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-gray-400">
@@ -124,7 +124,7 @@ const Skills = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="w-full h-[600px] cursor-move relative z-20 bg-white/5 rounded-xl border border-white/10 overflow-hidden"
+              className="w-full h-[360px] sm:h-[500px] md:h-[600px] cursor-move relative z-20 bg-white/5 rounded-xl border border-white/10 overflow-hidden"
             >
               <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 15], fov: 50 }}>
                 <fog attach="fog" args={['#050505', 0, 30]} />

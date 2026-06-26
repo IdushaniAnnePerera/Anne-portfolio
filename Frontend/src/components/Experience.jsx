@@ -5,7 +5,7 @@ import GlitchText from './ui/GlitchText';
 
 const ExperienceCard = ({ exp, index }) => {
    return (
-      <div className="relative w-[80vw] md:w-[600px] flex-shrink-0 p-8 border border-white/10 bg-black/80 backdrop-blur-md rounded-2xl group overflow-hidden">
+      <div className="relative w-full md:w-[600px] flex-shrink-0 p-6 md:p-8 border border-white/10 bg-black/80 backdrop-blur-md rounded-2xl group overflow-hidden">
          {/* Cyberpunk Decor */}
          <div className="absolute top-0 right-0 p-4 opacity-50">
             <div className="w-20 h-20 border-t-2 border-r-2 border-neon-purple rounded-tr-2xl" />
@@ -78,49 +78,60 @@ const Experience = () => {
    const titleX = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
    return (
-      <section ref={targetRef} id="experience" className="relative h-[300vh] bg-black">
-         <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+      <section id="experience" className="bg-black">
 
-            {/* Background visuals */}
-            <motion.div style={{ x: bgX }} className="absolute inset-0 opacity-20 pointer-events-none">
-               <div className="absolute top-1/4 left-0 w-[40vw] h-px bg-gray-500 shadow-[0_0_20px_#737373]" />
-               <div className="absolute bottom-1/3 right-0 w-[60vw] h-px bg-orange-500 shadow-[0_0_20px_#f97316]" />
-            </motion.div>
-
-            {/* Section Title - Fixed then moves */}
-            <motion.div style={{ x: titleX }} className="px-8 md:px-24 mb-12 relative z-10">
-               <h2 className="text-6xl md:text-9xl font-bold opacity-10 text-transparent bg-clip-text bg-gradient-to-r from-white to-transparent">
-                  TIMELINE
-               </h2>
-               <div className="absolute top-1/2 left-8 md:left-24 -translate-y-1/2">
-                  <h3 className="text-3xl md:text-5xl font-bold text-white">
-                     <span className="text-orange-300 mr-4">{">>>"}</span>
-                     Experience
-                  </h3>
-               </div>
-            </motion.div>
-
-            {/* Horizontal Scroll Container */}
-            <motion.div style={{ x }} className="flex gap-12 px-8 md:px-24 w-max items-center">
-
-               {/* Start Node */}
-               <div className="w-[300px] flex-shrink-0 text-gray-500 font-mono text-sm">
-                  <div className="w-4 h-4 bg-gray-300 rounded-full shadow-[0_0_15px_#d4d4d4] mb-4" />
-                  <p>INITIALIZING_CAREER_PATH...</p>
-               </div>
-
+         {/* ── Mobile: vertical stack ── */}
+         <div className="md:hidden px-4 py-16">
+            <h3 className="text-3xl font-bold text-white mb-10">
+               <span className="text-orange-300 mr-3">{">>>"}</span>
+               Experience
+            </h3>
+            <div className="flex flex-col gap-6">
                {experiences.map((exp, index) => (
-                  <div key={exp.id} className="relative group">
-                     {/* Connector Line */}
-                     <div className="absolute top-1/2 -left-12 w-12 h-px bg-white/20" />
-
-                     <ExperienceCard exp={exp} index={index} />
-                  </div>
+                  <ExperienceCard key={exp.id} exp={exp} index={index} />
                ))}
-
-
-            </motion.div>
+            </div>
          </div>
+
+         {/* ── Desktop: horizontal scroll pinned ── */}
+         <div ref={targetRef} className="hidden md:block relative h-[300vh]">
+            <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+
+               {/* Background visuals */}
+               <motion.div style={{ x: bgX }} className="absolute inset-0 opacity-20 pointer-events-none">
+                  <div className="absolute top-1/4 left-0 w-[40vw] h-px bg-gray-500 shadow-[0_0_20px_#737373]" />
+                  <div className="absolute bottom-1/3 right-0 w-[60vw] h-px bg-orange-500 shadow-[0_0_20px_#f97316]" />
+               </motion.div>
+
+               {/* Section Title */}
+               <motion.div style={{ x: titleX }} className="px-8 md:px-24 mb-12 relative z-10">
+                  <h2 className="text-6xl md:text-9xl font-bold opacity-10 text-transparent bg-clip-text bg-gradient-to-r from-white to-transparent">
+                     TIMELINE
+                  </h2>
+                  <div className="absolute top-1/2 left-8 md:left-24 -translate-y-1/2">
+                     <h3 className="text-3xl md:text-5xl font-bold text-white">
+                        <span className="text-orange-300 mr-4">{">>>"}</span>
+                        Experience
+                     </h3>
+                  </div>
+               </motion.div>
+
+               {/* Horizontal Scroll Container */}
+               <motion.div style={{ x }} className="flex gap-12 px-8 md:px-24 w-max items-center">
+                  <div className="w-[300px] flex-shrink-0 text-gray-500 font-mono text-sm">
+                     <div className="w-4 h-4 bg-gray-300 rounded-full shadow-[0_0_15px_#d4d4d4] mb-4" />
+                     <p>INITIALIZING_CAREER_PATH...</p>
+                  </div>
+                  {experiences.map((exp, index) => (
+                     <div key={exp.id} className="relative group">
+                        <div className="absolute top-1/2 -left-12 w-12 h-px bg-white/20" />
+                        <ExperienceCard exp={exp} index={index} />
+                     </div>
+                  ))}
+               </motion.div>
+            </div>
+         </div>
+
       </section>
    );
 };
